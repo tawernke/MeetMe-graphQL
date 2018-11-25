@@ -1,0 +1,243 @@
+.App {
+  text-align: center;
+}
+
+html, #root{
+  height: 100%;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.app {
+  padding-top: 55px;
+  height: 100%
+}
+
+/* Homepage */
+
+.logon-button {
+  background-color: #55A7F2;
+}
+
+.login-card {
+  width: 30%;
+  background-color: #343A40;
+  margin-top: 50px;
+}
+
+/* App */
+
+.entire-app {
+  height: 100%
+}
+
+body {
+  /* background-image: url("/front-end/meet-me/public/alexander-gilbertson-485233-unsplash.jpg"); */
+  /* Full height */
+  height: 100%; 
+  /* background-image: url('/cheers.jpg'); */
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Navbar */
+
+.navbar{
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.navbar-logo {
+  height: 100%;
+}
+
+/* Profile page */
+
+.profile-preferencesList {
+  padding-top: 15px;
+}
+
+.ant-collapse {
+  border: 0;
+  background-color: none;
+  color: none;
+  width: 100%;
+}
+
+.preferences-close {
+  height: 9px;
+  width: auto;
+  float: right;
+  margin-right: 10px;
+}
+
+.profile-picture {
+  width: 80%;
+}
+
+.profile-spin {
+  padding-left: 130px;
+  padding-top: 30px;
+}
+
+.your-places-list {
+  list-style: none;
+  padding-left: 10%;
+}
+
+.entire-profile {
+  height: 100%;
+}
+
+.profile-yourPlaces {
+  display: inline-block;
+  width: 25%;
+  height:800px;
+  padding-left: 3%;
+  padding-top: 40px;
+  background-color: #FAFAFA;
+}
+
+.preferences {
+  padding-top: 15px;
+}
+
+.profile-main {
+  padding-top: 40px;
+  width: 70%;
+  float: right;
+  padding-right: 5%;
+  height: 100%;
+}
+
+.your-places-item:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.preferences-input {
+  width: 70%;
+  margin-bottom: 8px;
+}
+
+
+/* Event Details*/
+
+.placeholder-text {
+  font-size: 85%;
+}
+
+.form-control {
+  margin-bottom: 20px;
+}
+
+.ant-select-selection {
+  height:35px;
+}
+
+.user-select {
+  height: 60px;
+}
+
+/* Discover page */
+
+.saveIcon {
+  cursor: pointer;
+}
+
+.discover-placeIcon {
+  padding-right: 10px;
+}
+
+.discover-spin {
+  text-align:center;
+  padding-top: 200px;
+}
+
+.discover-page {
+  background-color: #FAFAFA;
+  height: 100%;
+}
+
+.discover-location-heading {
+  margin-left: 7%;
+  padding-top: 20px;
+  display: inline-block;
+}
+
+.discover-search-heading {
+    margin-left: 7%;
+    padding-top: 20px;
+    display: inline-block;
+}
+
+.discover-form-search {
+  margin-left: 7%;
+}
+
+.discover-current-address {
+  float: right;
+  padding-top: 15px;
+  padding-right: 15px;
+}
+
+.discover-location-icon {
+  float: right;
+  padding-top: 15px;
+}
+
+.discover-search-textbox {
+  margin-right: 10px;
+  width: 20%;
+  display: inline-block;
+}
+
+.discover-container {
+  margin: 3% 7%;
+}
+
+.discover-card {
+  margin-bottom: 50px;
+}
+
+.card-img-top{
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Modal */
+
+.ant-modal-body, p {
+  margin-bottom: 1px;
+}
+
+.map-iframe {
+  width: 100%;
+}
