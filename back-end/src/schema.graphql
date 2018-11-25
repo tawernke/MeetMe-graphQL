@@ -1,9 +1,45 @@
 #import * from './generated/prisma.graphql'
+#The above comment helps return the Event, without having to define it here
 
 type Mutation {
-  createItem(title: String, description: String, price: Int, image: String, largeImage: String): Item!
+  createEvent(
+    title: String
+    location: String
+    description: String
+    from: String
+    to: String
+  ): Event!
+}
+
+type Mutation {
+  createPlace(
+    name: String
+    address: String
+    city: String
+    state: String
+    zip: String
+    country: String
+    type: String
+    rating: Int
+    image: String
+    phone: String
+  ): Place!
+}
+
+type Mutation {
+  createPreference(
+    name: String
+  ): Preference!
 }
 
 type Query {
-  items: [Item]!
+  events: [Event]!
+}
+
+type Query {
+  places: [Place]!
+}
+
+type Query {
+  preferences: [Preference]!
 }

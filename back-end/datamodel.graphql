@@ -1,4 +1,45 @@
+#This file is the schema for prisma
+
 type User {
   id: ID! @unique
   name: String!
+  username: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Event {
+  id: ID! @unique
+  title: String
+  location: String
+  description: String
+  from: String
+  to: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  # user: User!
+}
+
+type Place {
+  id: ID! @unique
+  name: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  type: String
+  rating: Int
+  image: String
+  phone: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  # user: User!
+}
+
+type Preference {
+  id: ID! @unique
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

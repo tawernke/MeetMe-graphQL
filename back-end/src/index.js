@@ -2,10 +2,11 @@ require('dotenv').config({path: 'variables.env' })
 const createServer = require('./createServer')
 const db = require('./db')
 
+//Start a version of the server from the createServer function
 const server = createServer()
 
-//TOD Use express middleware to handle cookies (JWT)
-//TOD Use express middleware to populate current user
+//TODo Use express middleware to handle cookies (JWT)
+//TODo Use express middleware to populate current user
 
 server.start({
   cors: {
