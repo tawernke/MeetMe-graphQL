@@ -21,6 +21,7 @@ const SINGLE_EVENT_QUERY = gql`
 
 const UPDATE_EVENT_MUTATION = gql `
   mutation UPDATE_EVENT_MUTATION(
+    $id: ID!
     $title: String
     $location: String
     $description: String
@@ -28,6 +29,7 @@ const UPDATE_EVENT_MUTATION = gql `
     $end: String
   ) {
     updateEvent(
+      id: $id
       title: $title
       location: $location
       description: $description
@@ -99,6 +101,16 @@ class UpdateEvent extends Component {
       newEvent: newState
     });
   };
+
+  updateEvent = async (e, updateEventMutation) => {
+    e.preventDefault()
+    const res = await updateEventMutation({
+      variables: {
+        id: this.props.match.params.eventId,
+        ...this.state.newEvent
+      }
+    })
+  }
   
   render() {
     return (
