@@ -7,6 +7,7 @@ const Query = {
   //   const items = await ctx.db.query.items()
   //   return items
   // }
+  event: forwardTo('db'),
   places: forwardTo('db'),
   preferences: forwardTo('db')
 }

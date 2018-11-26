@@ -3,6 +3,7 @@
 type User {
   id: ID! @unique
   name: String!
+  image: String
   username: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -13,8 +14,8 @@ type Event {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
   createdAt: DateTime!
   updatedAt: DateTime!
   # user: User!

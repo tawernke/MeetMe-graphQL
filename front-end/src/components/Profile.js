@@ -1,15 +1,35 @@
 import React, { Component } from 'react'
+import { Query } from 'react-apollo'
 import FullCalendar from 'fullcalendar-reactwrapper'
 import {Route, Switch} from 'react-router-dom'
 import moment from 'moment'
 import axios from 'axios'
+import gql from 'graphql-tag'
+import { Spin } from 'antd'
 import EventDetails from './EventDetails'
+import UpdateEvent from './UpdateEvent'
 import YourPlaces from './YourPlaces'
 import '../fullcalendar.min.css'
 import '../App.css'
-import { Spin } from 'antd'
 
 const usernameStorageKey = 'USERNAME'
+
+const ALL_EVENTS_QUERY = gql `
+  query ALL_EVENTS_QUERY {
+    events {
+      id
+      title
+      location
+      description
+      start
+      end
+    }
+    preferences {
+      id
+      name
+    }
+  }
+`
 
 class Profile extends Component {
   
@@ -81,23 +101,25 @@ class Profile extends Component {
   }
 
   eventClick = (calEvent) => {
-    this.state.events.some(event => {
-      if(event.id === calEvent.id) {
-        const currentEventUsers = event.users.map(user => {
-          return user.name
-        })
-        const currentEventUserIds = event.users.map(user => {
-          return user.id
-        })
-        this.setState({
-          currentEvent: event,
-          currentEventUsers: currentEventUsers,
-          currentEventUserIds: currentEventUserIds,
-          selectedDate: calEvent.start,
-          selectedDateEnd: calEvent.end,
-        }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
-      }
-    })
+    this.props.history.push(`${this.props.match.url}/updateEvent/${calEvent.id}`)
+    // this.state.events.some(event => {
+    //   if(event.id === calEvent.id) {
+    //     const currentEventUsers = event.users.map(user => {
+    //       return user.name
+    //     })
+    //     const currentEventUserIds = event.users.map(user => {
+    //       return user.id
+    //     })
+    //     this.setState({
+    //       currentEvent: event,
+    //       currentEventUsers: currentEventUsers,
+    //       currentEventUserIds: currentEventUserIds,
+    //       selectedDate: calEvent.start,
+    //       selectedDateEnd: calEvent.end,
+    //     }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
+    //   }
+    //   return null
+    // })
   }
 
   selectedUsers = (userIds) => {
@@ -244,26 +266,40 @@ class Profile extends Component {
                 />}
               />
               <Route
-                exact path={this.props.match.url}
-                render={() => <FullCalendar
-                  id = "your-custom-ID"
-                  header = {{
-                    left: 'prev,next today myCustomButton',
-                    center: 'title',
-                    right: 'month,basicWeek,basicDay'
-                  }}
-                  selectable= {true}
-                  select={this.select}
-                  defaultDate={moment()}
-                  navLinks= {true}
-                  editable= {true}
-                  eventDrop={this.eventDrop}
-                  eventLimit= {true}
-                  events = {this.state.events}
-                  eventClick = {this.eventClick}
-                  dayClick={this.dayClick}
-                  se
+                path={this.props.match.url + "/updateEvent/:eventId"}
+                render={(routeProps) => <UpdateEvent
+                  {...routeProps}
                 />}
+              />
+              <Route
+                exact path={this.props.match.url}
+                render={() => <Query query={ALL_EVENTS_QUERY}>
+                  {({ data, error, loading}) => {
+                    if(loading) return <Spin size="large"/>
+                    if(error) return <p>Error: {error.message}</p>
+                    console.log(data.events)
+                    return <FullCalendar
+                        id = "your-custom-ID"
+                        header = {{
+                          left: 'prev,next today myCustomButton',
+                          center: 'title',
+                          right: 'month,basicWeek,basicDay'
+                        }}
+                        selectable= {true}
+                        select={this.select}
+                        defaultDate={moment()}
+                        navLinks= {true}
+                        editable= {true}
+                        eventDrop={this.eventDrop}
+                        eventLimit= {true}
+                        events = {data.events}
+                        eventClick = {this.eventClick}
+                        dayClick={this.dayClick}
+                        se
+                      />
+                  }}
+                </Query>
+                }
               />
           <Switch/>
         </div>

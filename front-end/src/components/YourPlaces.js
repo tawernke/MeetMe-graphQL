@@ -3,7 +3,7 @@ import Favourites from './Favourites'
 import ToDos from './ToDos'
 import Preferences from './Preferences'
 import PlacesModal from './PlacesModal'
-import { Tabs, Icon, Upload, Checkbox, Collapse } from 'antd'
+import { Tabs, Icon, Upload, Checkbox } from 'antd'
 
 const TabPane = Tabs.TabPane
 const CheckboxGroup = Checkbox.Group

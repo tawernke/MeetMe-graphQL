@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/tim-wernke-722f56/meetme/dev
-# timestamp: Sun Nov 25 2018 00:01:17 GMT-0800 (Pacific Standard Time)
+# timestamp: Sun Nov 25 2018 13:34:13 GMT-0800 (Pacific Standard Time)
 
 type AggregateEvent {
   count: Int!
@@ -29,8 +29,8 @@ type Event implements Node {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -49,8 +49,8 @@ input EventCreateInput {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
 }
 
 """An edge in a connection."""
@@ -71,10 +71,10 @@ enum EventOrderByInput {
   location_DESC
   description_ASC
   description_DESC
-  from_ASC
-  from_DESC
-  to_ASC
-  to_DESC
+  start_ASC
+  start_DESC
+  end_ASC
+  end_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -86,8 +86,8 @@ type EventPreviousValues {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -135,16 +135,16 @@ input EventUpdateInput {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
 }
 
 input EventUpdateManyMutationInput {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  start: String
+  end: String
 }
 
 input EventWhereInput {
@@ -316,86 +316,86 @@ input EventWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  from: String
+  start: String
 
   """All values that are not equal to given value."""
-  from_not: String
+  start_not: String
 
   """All values that are contained in given list."""
-  from_in: [String!]
+  start_in: [String!]
 
   """All values that are not contained in given list."""
-  from_not_in: [String!]
+  start_not_in: [String!]
 
   """All values less than the given value."""
-  from_lt: String
+  start_lt: String
 
   """All values less than or equal the given value."""
-  from_lte: String
+  start_lte: String
 
   """All values greater than the given value."""
-  from_gt: String
+  start_gt: String
 
   """All values greater than or equal the given value."""
-  from_gte: String
+  start_gte: String
 
   """All values containing the given string."""
-  from_contains: String
+  start_contains: String
 
   """All values not containing the given string."""
-  from_not_contains: String
+  start_not_contains: String
 
   """All values starting with the given string."""
-  from_starts_with: String
+  start_starts_with: String
 
   """All values not starting with the given string."""
-  from_not_starts_with: String
+  start_not_starts_with: String
 
   """All values ending with the given string."""
-  from_ends_with: String
+  start_ends_with: String
 
   """All values not ending with the given string."""
-  from_not_ends_with: String
-  to: String
+  start_not_ends_with: String
+  end: String
 
   """All values that are not equal to given value."""
-  to_not: String
+  end_not: String
 
   """All values that are contained in given list."""
-  to_in: [String!]
+  end_in: [String!]
 
   """All values that are not contained in given list."""
-  to_not_in: [String!]
+  end_not_in: [String!]
 
   """All values less than the given value."""
-  to_lt: String
+  end_lt: String
 
   """All values less than or equal the given value."""
-  to_lte: String
+  end_lte: String
 
   """All values greater than the given value."""
-  to_gt: String
+  end_gt: String
 
   """All values greater than or equal the given value."""
-  to_gte: String
+  end_gte: String
 
   """All values containing the given string."""
-  to_contains: String
+  end_contains: String
 
   """All values not containing the given string."""
-  to_not_contains: String
+  end_not_contains: String
 
   """All values starting with the given string."""
-  to_starts_with: String
+  end_starts_with: String
 
   """All values not starting with the given string."""
-  to_not_starts_with: String
+  end_not_starts_with: String
 
   """All values ending with the given string."""
-  to_ends_with: String
+  end_ends_with: String
 
   """All values not ending with the given string."""
-  to_not_ends_with: String
+  end_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
