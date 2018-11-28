@@ -4,6 +4,7 @@
 type Mutation {
   createEvent(title: String, location: String, description: String, start: String, end: String): Event!
   updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String): Event!
+  deleteEvent(id: ID!): Event
 }
 
 type Mutation {

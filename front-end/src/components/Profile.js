@@ -250,7 +250,7 @@ class Profile extends Component {
         <div className="profile-main">
           <Switch/>
               <Route
-                path={this.props.match.url + "/event/:eventId"}
+                path={this.props.match.url + "/newEvent"}
                 render={(routeProps) => <EventDetails
                   addEvent={this.addEvent}
                   state={this.state}
@@ -277,7 +277,6 @@ class Profile extends Component {
                   {({ data, error, loading}) => {
                     if(loading) return <Spin size="large"/>
                     if(error) return <p>Error: {error.message}</p>
-                    console.log(data.events)
                     return <FullCalendar
                         id = "your-custom-ID"
                         header = {{
@@ -310,3 +309,4 @@ class Profile extends Component {
 
 
 export default Profile
+export {ALL_EVENTS_QUERY}

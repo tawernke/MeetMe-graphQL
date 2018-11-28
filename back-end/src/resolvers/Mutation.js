@@ -31,6 +31,16 @@ const Mutations = {
     )
   },
 
+  async deleteEvent(parent, args, ctx, info) {
+    const where = {...args}
+    //1. find the event
+    const event = await ctx.db.query.event({where}, `{id title}`)
+    //2. Check if they own that item, or they have permissions
+    //TODO
+    //3. Delete it
+    return ctx.db.mutation.deleteEvent({where}, info)
+  },
+
   async createPlace(parent, args, ctx, info) {
     const place = await ctx.db.mutation.createPlace({
       data: {

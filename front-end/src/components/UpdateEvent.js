@@ -5,6 +5,7 @@ import MultiSelect from './MultiSelect'
 import { DatePicker, TimePicker } from 'antd'
 import 'antd/dist/antd.css'
 import gql from 'graphql-tag'
+import DeleteEvent from './DeleteEvent'
 
 const SINGLE_EVENT_QUERY = gql`
   query SINGLE_EVENT_QUERY($id: ID!) {
@@ -209,7 +210,13 @@ class UpdateEvent extends Component {
                       </div>
                       <div className="row">
                         <div className="col">
-                          <button className="btn btn-danger">Delete</button>
+                          <DeleteEvent 
+                            history={this.props.history} 
+                            match={this.props.match} 
+                            id={data.event.id}
+                            >
+                            Delete Event
+                            </DeleteEvent>
                         </div>
                         <div className="col">
                           <button type="submit" className="btn btn-primary">Save</button>

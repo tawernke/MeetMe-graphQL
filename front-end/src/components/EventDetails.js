@@ -117,7 +117,8 @@ class EventDetails extends Component {
     const {deleteEvent} = this.props
     return (
       <Mutation mutation={CREATE_EVENT_MUTATION} variables={this.state.newEvent}>
-        {(createEvent, { loading, error}) => (
+        {(createEvent, { loading, error}) => {
+          return(
           <div className="eventDetails">
             <h1>Event Creation</h1>
             <form onSubmit={async e => {
@@ -194,12 +195,12 @@ class EventDetails extends Component {
                 <div className="row user-select">
                   <div className="col">
                     <p>Select Users:</p>
-                    <MultiSelect 
+                    {/* <MultiSelect 
                       users={this.props.users}
                       currentEventUserNames={this.state.userNames}
                       selectedUsers={this.props.selectedUsers}
                       eventUsers={this.state.eventDetails.users}
-                      />
+                      /> */}
                   </div>
                   <div className="col">
                   </div>
@@ -215,7 +216,7 @@ class EventDetails extends Component {
               </fieldset>
             </form>
           </div>
-        )}
+        )}}
       </Mutation>
     )
   }
