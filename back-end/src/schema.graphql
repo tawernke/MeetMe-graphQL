@@ -1,13 +1,17 @@
 #import * from './generated/prisma.graphql'
 #The above comment helps return the Event, without having to define it here
 
+type SuccessMessage {
+  message: String
+}
+
 type Mutation {
   createEvent(title: String, location: String, description: String, start: String, end: String): Event!
   updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String): Event!
   deleteEvent(id: ID!): Event
-}
-
-type Mutation {
+  signup(email: String!, password: String!, name: String!): User!
+  signin(email: String!, password: String!): User!
+  signout: SuccessMessage
   createPlace(
     name: String
     address: String
@@ -16,9 +20,10 @@ type Mutation {
     zip: String
     country: String
     type: String
-    rating: Int
+    rating: Float
     image: String
     phone: String
+    price: String
   ): Place!
 }
 
@@ -31,12 +36,7 @@ type Mutation {
 type Query {
   events: [Event]!
   event(where: EventWhereUniqueInput!): Event
-}
-
-type Query {
   places: [Place]!
-}
-
-type Query {
   preferences: [Preference]!
+  me: User
 }

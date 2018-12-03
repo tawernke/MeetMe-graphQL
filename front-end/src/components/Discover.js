@@ -3,7 +3,8 @@ import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 import Place from './Place'
 import {Spin} from 'antd'
-import {googleMapsApiKey} from '../ApiKey'
+
+
 
 const usernameStorageKey = 'USERNAME'
 
@@ -21,36 +22,26 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem(usernameStorageKey) === null) {
-      this.setState({
-        redirect: true,
+    const location = new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const coord = {
+          lat: pos.coords.latitude,
+          long: pos.coords.longitude
+        }
+        resolve(coord)
       })
-    } else {
-      let city = ''
-      let street = ''
-      let streetNumber = ''
-      navigator.geolocation.getCurrentPosition((pos) => {
-        let latlng = pos.coords.latitude + "," + pos.coords.longitude
+    })
+    location
+      .then(res => {
         axios
-          .get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${googleMapsApiKey}`)
-          .then((res) => {
-            city = res.data.results[0].address_components[3].long_name
-            street = res.data.results[0].address_components[1].short_name
-            streetNumber = res.data.results[0].address_components[0].short_name
-            axios
-              .get(`http://localhost:8080/discover/${city}/${street}/${streetNumber}`)
-              .then(response => {
-                this.setState({
-                  placeSuggestions: response.data.businesses,
-                  streetNumber,
-                  street,
-                  city,
-                  isLoading: false,
-                })
-              })
+          .get(`http://localhost:8080/discover/${res.lat}/${res.long}/`)
+          .then(response => {
+            this.setState({
+              placeSuggestions: response.data.businesses,
+              isLoading: false,
+            })
           })
       })
-    }
   }
 
   searchPlaces = (e) => {
@@ -80,27 +71,28 @@ class Discover extends Component {
       const isFavouriteSaved = this.props.savedPlaces.filter(savedPlace => {
         return placeSuggestion.name === savedPlace.name && savedPlace.type === "favourite"
       })
+      const singlePlace = {
+        name: placeSuggestion.name,
+        address: placeSuggestion.location.address1,
+        city: placeSuggestion.location.city,
+        state: placeSuggestion.location.state,
+        zip: placeSuggestion.location.zip_code,
+        country: placeSuggestion.location.country,
+        image: placeSuggestion.image_url,
+        rating: placeSuggestion.rating,
+        phone: placeSuggestion.phone,
+        key:i,
+        price: placeSuggestion.price,
+      }
       return <Place
-        name = {placeSuggestion.name}
-        address1 = {placeSuggestion.location.address1}
-        city = {placeSuggestion.location.city}
-        state = {placeSuggestion.location.state}
-        zip = {placeSuggestion.location.zip_code}
-        country = {placeSuggestion.location.country}
-        image = {placeSuggestion.image_url}
-        rating = {placeSuggestion.rating}
-        phoneNumber = {placeSuggestion.phone}
-        key = {i}
-        price={placeSuggestion.price}
-        addPlace={this.props.addPlace}
-        deletePlace={this.props.deletePlace}
+        place={singlePlace}
         isToDoSaved={isToDoSaved}
         isFavouriteSaved={isFavouriteSaved}
-        addPlaceToState={this.addPlaceToState}
         />
     })
     const {streetNumber, street, city, showingSearchResults} = this.state
     return(
+
       <div className="discover-page">
         {this.state.isLoading ? <div className="discover-spin">{<Spin size="large" />}</div> :
         <div>

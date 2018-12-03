@@ -1,12 +1,26 @@
 #This file is the schema for prisma
 
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMUPDATE
+  ITEMDELETE
+  PERMISSIONUPDATE
+}
+
 type User {
   id: ID! @unique
   name: String!
+  email: String! @unique
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission]
   image: String
-  username: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  events: [Event]
+  places: [Place]
+  preferences: [Preference]
 }
 
 type Event {
@@ -18,7 +32,7 @@ type Event {
   end: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  # user: User!
+  user: [User]!
 }
 
 type Place {
@@ -30,12 +44,13 @@ type Place {
   zip: String
   country: String
   type: String
-  rating: Int
+  rating: Float
   image: String
   phone: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  # user: User!
+  price: String
+  user: User!
 }
 
 type Preference {
@@ -43,4 +58,5 @@ type Preference {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User!
 }

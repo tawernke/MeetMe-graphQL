@@ -27,6 +27,10 @@ const CREATE_EVENT_MUTATION = gql `
       description
       start
       end
+      user {
+        id
+        name
+      }
     }
   }
 `
@@ -103,7 +107,7 @@ class EventDetails extends Component {
   }
 
   handleChange = e => {
-    console.log(this.props.match.url.substring(0, 2))
+    // console.log(this.props.match.url.substring(0, 2))
     const { name, type, value } = e.target
     let newState = this.state.newEvent
     newState[name] = value

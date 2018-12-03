@@ -16,6 +16,10 @@ const client = new ApolloClient({
         }
       });
     },
+    clientState: {
+      resolvers:{},
+      defaults: {}
+    }
   })
 
 ReactDOM.render(

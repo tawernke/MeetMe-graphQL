@@ -16,7 +16,7 @@ const usernameStorageKey = 'USERNAME'
 
 const ALL_EVENTS_QUERY = gql `
   query ALL_EVENTS_QUERY {
-    events {
+    events{
       id
       title
       location
@@ -46,33 +46,33 @@ class Profile extends Component {
     usersCalendarsShown: []
   }
 
-  componentDidMount() {
-    if (localStorage.getItem('USERNAME') === null) {
-      this.props.history.push('/')
-    }
-    axios
-      .get(`http://localhost:8080/userProfile/${this.props.match.params.username}`)
-      .then(response => {
-        this.setState({
-          userDetailsAndPlaces: response.data,
-          isLoading: false
-        })
-      })
-    if (localStorage.getItem('USERNAME') !== null) {
-      const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
-      axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
-        .then(response => {
-          const coloredEvents = response.data.map(event => {
-            event.color = '#3A87AD'
-            return event
-          })
-          this.setState({
-            events: coloredEvents,
-            currentUser: loggedInUser
-          })
-        })
-      }
-  }
+  // componentDidMount() {
+  //   if (localStorage.getItem('USERNAME') === null) {
+  //     this.props.history.push('/')
+  //   }
+  //   axios
+  //     .get(`http://localhost:8080/userProfile/${this.props.match.params.username}`)
+  //     .then(response => {
+  //       this.setState({
+  //         userDetailsAndPlaces: response.data,
+  //         isLoading: false
+  //       })
+  //     })
+  //   if (localStorage.getItem('USERNAME') !== null) {
+  //     const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
+  //     axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
+  //       .then(response => {
+  //         const coloredEvents = response.data.map(event => {
+  //           event.color = '#3A87AD'
+  //           return event
+  //         })
+  //         this.setState({
+  //           events: coloredEvents,
+  //           currentUser: loggedInUser
+  //         })
+  //       })
+  //     }
+  // }
 
   checkBoxClick = (value) => {
     if(value.length !== 0) {
@@ -102,24 +102,6 @@ class Profile extends Component {
 
   eventClick = (calEvent) => {
     this.props.history.push(`${this.props.match.url}/updateEvent/${calEvent.id}`)
-    // this.state.events.some(event => {
-    //   if(event.id === calEvent.id) {
-    //     const currentEventUsers = event.users.map(user => {
-    //       return user.name
-    //     })
-    //     const currentEventUserIds = event.users.map(user => {
-    //       return user.id
-    //     })
-    //     this.setState({
-    //       currentEvent: event,
-    //       currentEventUsers: currentEventUsers,
-    //       currentEventUserIds: currentEventUserIds,
-    //       selectedDate: calEvent.start,
-    //       selectedDateEnd: calEvent.end,
-    //     }, () => this.props.history.push(`${this.props.match.url}/event/${calEvent.id}`))
-    //   }
-    //   return null
-    // })
   }
 
   selectedUsers = (userIds) => {
@@ -219,9 +201,7 @@ class Profile extends Component {
   }
 
   dayClick = (date) => {
-    this.setState ({
-      selectedDate: date
-    }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
+    this.props.history.push(this.props.match.url + '/newEvent')
   }
 
   select = (start, end) => {
@@ -234,9 +214,8 @@ class Profile extends Component {
   render() {
     return(
       <div className="entire-profile">
-        {this.state.isLoading ? <div className="profile-spin">{<Spin size="large" />}</div> :
         < div className = "profile-yourPlaces" >
-        <h1>Meet {this.state.userDetailsAndPlaces[0].name}</h1>
+        <h1>Meet </h1>
           <YourPlaces
             currentUser={this.state.userDetailsAndPlaces}
             addPlace={this.addPlace}
@@ -246,7 +225,6 @@ class Profile extends Component {
             checkBoxClick={this.checkBoxClick}
             />
         </div>
-        }
         <div className="profile-main">
           <Switch/>
               <Route

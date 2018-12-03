@@ -14,7 +14,7 @@ const DELETE_EVENT_MUTATION = gql`
 class DeleteEvent extends Component {
 
   update = (cache, payload) => {
-    //manually updatr the cache on the client so it matches the server
+    //manually update the cache on the client so it matches the server
     //1. Query the cache for the events we want
     const data = cache.readQuery({ query: ALL_EVENTS_QUERY})
     console.log(data)

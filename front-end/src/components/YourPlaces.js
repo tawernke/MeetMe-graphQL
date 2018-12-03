@@ -46,19 +46,19 @@ class YourPlaces extends Component {
   }
 
   render() {
-    const profileToDos = this.props.currentUser[0].places.filter(place => {
-      return place.type === 'todo'
-    })
-    const profileFavourites = this.props.currentUser[0].places.filter(place => {
-      return place.type === 'favourite'
-    })
-    const users = this.props.users.map(user => {
-       user = {
-        label:user.name,
-        value:user.id
-      }
-      return user
-    })
+    // const profileToDos = this.props.currentUser[0].places.filter(place => {
+    //   return place.type === 'todo'
+    // })
+    // const profileFavourites = this.props.currentUser[0].places.filter(place => {
+    //   return place.type === 'favourite'
+    // })
+    // const users = this.props.users.map(user => {
+    //    user = {
+    //     label:user.name,
+    //     value:user.id
+    //   }
+    //   return user
+    // })
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -75,8 +75,8 @@ class YourPlaces extends Component {
           place={this.state.place}
           isLoading={this.state.isLoading}
         />
-        {this.props.currentUser[0].username === 'tawernke' ? <img className="profile-picture" src="./Tim_Wernke.jpg" alt=""/> :
-        <Upload
+        <img className="profile-picture" src="./Tim_Wernke.jpg" alt=""/>
+        {/* <Upload
         name="avatar"
         listType="picture-card"
         className="avatar-uploader"
@@ -84,21 +84,20 @@ class YourPlaces extends Component {
         action="//jsonplaceholder.typicode.com/posts/"
         beforeUpload={this.beforeUpload}
         onChange={this.handleChange}
-        >
-        {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
-        </Upload>
-        }
+        > */}
+        {/* {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+        </Upload> */}
         <Tabs defaultActiveKey="1">
           <TabPane tab={<span><Icon type="star" />To Try</span>} key="1">
             <ToDos 
-            toDoPlaces={profileToDos}
+            // toDoPlaces={profileToDos}
             addPlace={this.props.addPlace}
             showModal={this.showModal}
             />
           </TabPane>
           <TabPane tab={<span><Icon type="heart" />Favourites</span>} key="2">
             <Favourites 
-            favouritePlaces={profileFavourites}
+            // favouritePlaces={profileFavourites}
             addPlace={this.props.addPlace}
             showModal={this.showModal}
             />
@@ -113,7 +112,7 @@ class YourPlaces extends Component {
           /> */}
         
         <CheckboxGroup
-          options={users}
+          // options={users}
           onChange={this.props.checkBoxClick}
           />
       </div>

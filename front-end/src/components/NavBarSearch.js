@@ -26,9 +26,9 @@ class NavBarSearch extends Component {
   
   render() {
 
-    const usersJSX = this.props.users.map((user, i) => {
-      return <Option key={user.id} value={user.id}>{user.name}</Option>
-    })
+    // const usersJSX = this.props.users.map((user, i) => {
+    //   return <Option key={user.id} value={user.id}>{user.name}</Option>
+    // })
     return(
       <div>
       <Select
@@ -39,7 +39,7 @@ class NavBarSearch extends Component {
         onSelect={this.onSelect}
         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
-        {usersJSX}
+        {/* {usersJSX} */}
       </Select>
         {this.state.fireRedirect ? <Redirect to={`${this.state.redirectUrl}`}/> : null }
       </div>
