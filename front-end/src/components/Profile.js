@@ -217,12 +217,12 @@ class Profile extends Component {
         < div className = "profile-yourPlaces" >
         <h1>Meet </h1>
           <YourPlaces
-            currentUser={this.state.userDetailsAndPlaces}
-            addPlace={this.addPlace}
-            showModal={this.props.showModal}
-            users={this.props.users}
-            addUsersCallendar={this.addUsersCallendar}
-            checkBoxClick={this.checkBoxClick}
+            // currentUser={this.state.userDetailsAndPlaces}
+            // showModal={this.props.showModal}
+            // users={this.props.users}
+            // addUsersCallendar={this.addUsersCallendar}
+            // checkBoxClick={this.checkBoxClick}
+            match={this.props.match}
             />
         </div>
         <div className="profile-main">

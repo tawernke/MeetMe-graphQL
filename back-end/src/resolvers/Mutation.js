@@ -6,7 +6,7 @@ const Mutations = {
   async createEvent(parent, args, ctx, info) {
     //Checks if user is logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that")
+      throw new Error("You must be logged in to do that");
     }
 
     //ctx.db accesses the db (seeing as it's available on context), call query or mutation, then reference the method
@@ -16,8 +16,8 @@ const Mutations = {
           //This is how we create a relationship between the Event and the User
           user: {
             connect: {
-              id: ctx.request.userId,
-            },
+              id: ctx.request.userId
+            }
           },
           ...args
         }
@@ -45,6 +45,23 @@ const Mutations = {
     );
   },
 
+  updateUser(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from the updates copy
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateUser(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+
   async deleteEvent(parent, args, ctx, info) {
     const where = { ...args };
     //1. find the event
@@ -61,8 +78,8 @@ const Mutations = {
         data: {
           user: {
             connect: {
-              id: ctx.request.userId,
-            },
+              id: ctx.request.userId
+            }
           },
           ...args
         }
@@ -133,8 +150,7 @@ const Mutations = {
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie("token");
     return { message: "Goodbye!" };
-  },
-  
+  }
 };
 
 module.exports = Mutations;

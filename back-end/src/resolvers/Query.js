@@ -8,7 +8,19 @@ const Query = {
   //   return items
   // }
   event: forwardTo('db'),
-  places: forwardTo('db'),
+  // places: forwardTo('db'),
+  async places(parent, {userId, type}, ctx, info) {
+    const places = await ctx.db.query.places(
+      {
+        where: { 
+          user: { id: userId},
+          type: type
+        },
+      },
+      info
+    )
+    return places
+  },
   preferences: forwardTo('db'),
   me(parent, args, ctx, info) {
     //check if there is a current user ID

@@ -9,6 +9,7 @@ type Mutation {
   createEvent(title: String, location: String, description: String, start: String, end: String): Event!
   updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String): Event!
   deleteEvent(id: ID!): Event
+  updateUser(id: ID!, image: String!): User!
   signup(email: String!, password: String!, name: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
@@ -36,7 +37,18 @@ type Mutation {
 type Query {
   events: [Event]!
   event(where: EventWhereUniqueInput!): Event
-  places: [Place]!
+  # places(where: String): [Place]!
+  places(userId: ID!, type: String!): [Place]!
+  # places(userId: ID!): [Place]!
   preferences: [Preference]!
+  user(id: ID!): User!
   me: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  permissions: [Permission!]!
+  places: [Place]
 }
