@@ -5,19 +5,23 @@ const Mutations = {
   //Event Muatations
   async createEvent(parent, args, ctx, info) {
     //Checks if user is logged in
-    if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that");
-    }
-
+    const idsArray = args.user.map(user => {
+      return {
+        id: user
+      }
+    })
+    delete args.user
+    // if (!ctx.request.userId) {
+    //   throw new Error("You must be logged in to do that");
+    // }
+    
     //ctx.db accesses the db (seeing as it's available on context), call query or mutation, then reference the method
     const event = await ctx.db.mutation.createEvent(
       {
         data: {
           //This is how we create a relationship between the Event and the User
           user: {
-            connect: {
-              id: ctx.request.userId
-            }
+            connect: idsArray
           },
           ...args
         }

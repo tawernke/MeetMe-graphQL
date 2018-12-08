@@ -14,8 +14,8 @@ import '../App.css'
 
 const usernameStorageKey = 'USERNAME'
 
-const ALL_EVENTS_QUERY = gql `
-  query ALL_EVENTS_QUERY {
+const ALL_USER_EVENTS_QUERY = gql `
+  query ALL_USER_EVENTS_QUERY {
     events{
       id
       title
@@ -45,34 +45,6 @@ class Profile extends Component {
     currentEventUserIds: [],
     usersCalendarsShown: []
   }
-
-  // componentDidMount() {
-  //   if (localStorage.getItem('USERNAME') === null) {
-  //     this.props.history.push('/')
-  //   }
-  //   axios
-  //     .get(`http://localhost:8080/userProfile/${this.props.match.params.username}`)
-  //     .then(response => {
-  //       this.setState({
-  //         userDetailsAndPlaces: response.data,
-  //         isLoading: false
-  //       })
-  //     })
-  //   if (localStorage.getItem('USERNAME') !== null) {
-  //     const loggedInUser = JSON.parse(localStorage.getItem(usernameStorageKey))
-  //     axios.get(`http://localhost:8080/calendar/${this.props.match.params.username}`)
-  //       .then(response => {
-  //         const coloredEvents = response.data.map(event => {
-  //           event.color = '#3A87AD'
-  //           return event
-  //         })
-  //         this.setState({
-  //           events: coloredEvents,
-  //           currentUser: loggedInUser
-  //         })
-  //       })
-  //     }
-  // }
 
   checkBoxClick = (value) => {
     if(value.length !== 0) {
@@ -129,63 +101,63 @@ class Profile extends Component {
     })
   }
 
-  addEvent = (e) => {
-    e.preventDefault()
-    const form = e.target
-    const newEvent = {
-      title: form.title.value,
-      start: moment(this.state.selectedDate).format(),
-      end: moment(this.state.selectedDateEnd).format(),
-      location: form.location.value,
-      description: form.description.value,
-      users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
-      allDay: false
-    }
-    if (this.props.location.pathname.includes('newEvent')) {
-      axios
-        .post('http://localhost:8080/addEvent', newEvent)
-        .then(response => {
-          this.setState({
-            events: this.state.events.concat(response.data),
-            isLoading: false
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    } else {
-      const newState = [...this.state.events]
-      const pos = newState.findIndex((event, i) => {
-        return event.id === this.state.currentEvent.id
-      })
-      newState[pos] = newEvent
-      newState[pos].id = this.state.currentEvent.id
-      axios
-        .post('http://localhost:8080/updateEvent', newState[pos])
-        .then(response => {
-          this.setState({
-            events: newState
-          }, () => this.props.history.push(this.props.match.url))
-        })
-    }
-  }
+  // addEvent = (e) => {
+  //   e.preventDefault()
+  //   const form = e.target
+  //   const newEvent = {
+  //     title: form.title.value,
+  //     start: moment(this.state.selectedDate).format(),
+  //     end: moment(this.state.selectedDateEnd).format(),
+  //     location: form.location.value,
+  //     description: form.description.value,
+  //     users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
+  //     allDay: false
+  //   }
+  //   if (this.props.location.pathname.includes('newEvent')) {
+  //     axios
+  //       .post('http://localhost:8080/addEvent', newEvent)
+  //       .then(response => {
+  //         this.setState({
+  //           events: this.state.events.concat(response.data),
+  //           isLoading: false
+  //         }, () => this.props.history.push(this.props.match.url))
+  //       })
+  //   } else {
+  //     const newState = [...this.state.events]
+  //     const pos = newState.findIndex((event, i) => {
+  //       return event.id === this.state.currentEvent.id
+  //     })
+  //     newState[pos] = newEvent
+  //     newState[pos].id = this.state.currentEvent.id
+  //     axios
+  //       .post('http://localhost:8080/updateEvent', newState[pos])
+  //       .then(response => {
+  //         this.setState({
+  //           events: newState
+  //         }, () => this.props.history.push(this.props.match.url))
+  //       })
+  //   }
+  // }
 
-  deleteEvent = () => {
-    const deletedEventId = this.state.currentEvent.id
-    const remainingEvents = this.state.events.filter(event => event.id !== deletedEventId)
-    let userIdsArray = []
-    this.state.currentEvent.users.forEach(user => {
-      userIdsArray.push(user.id)
-    })
-    const deleteObj = {}
-    deleteObj.eventId = deletedEventId
-    deleteObj.userIds = userIdsArray
-    this.setState({
-      events: remainingEvents,
-      currentEvent: {}
-    }, () => this.props.history.push(this.props.match.url))
-    axios.delete('http://localhost:8080/deleteEvent', {data: deleteObj})
-      .then(response => {
-        console.log(response)
-      })
-  }
+  // deleteEvent = () => {
+  //   const deletedEventId = this.state.currentEvent.id
+  //   const remainingEvents = this.state.events.filter(event => event.id !== deletedEventId)
+  //   let userIdsArray = []
+  //   this.state.currentEvent.users.forEach(user => {
+  //     userIdsArray.push(user.id)
+  //   })
+  //   const deleteObj = {}
+  //   deleteObj.eventId = deletedEventId
+  //   deleteObj.userIds = userIdsArray
+  //   this.setState({
+  //     events: remainingEvents,
+  //     currentEvent: {}
+  //   }, () => this.props.history.push(this.props.match.url))
+  //   axios.delete('http://localhost:8080/deleteEvent', {data: deleteObj})
+  //     .then(response => {
+  //       console.log(response)
+  //     })
+  // }
 
   eventDrop = (event) => {
     console.log(event)
@@ -208,22 +180,14 @@ class Profile extends Component {
     this.setState ({
       selectedDate: moment(start).set('hour', moment().get('hour')),
       selectedDateEnd: moment(end).subtract(60, 'minute').set('hour', moment().get('hour'))
-    }, () => this.props.history.push(this.props.match.url + '/event/newEvent'))
+    }, () => this.props.history.push(this.props.match.url + '/newEvent'))
   }
   
   render() {
     return(
       <div className="entire-profile">
         < div className = "profile-yourPlaces" >
-        <h1>Meet </h1>
-          <YourPlaces
-            // currentUser={this.state.userDetailsAndPlaces}
-            // showModal={this.props.showModal}
-            // users={this.props.users}
-            // addUsersCallendar={this.addUsersCallendar}
-            // checkBoxClick={this.checkBoxClick}
-            match={this.props.match}
-            />
+          <YourPlaces match={this.props.match}/>
         </div>
         <div className="profile-main">
           <Switch/>
@@ -247,11 +211,12 @@ class Profile extends Component {
                 path={this.props.match.url + "/updateEvent/:eventId"}
                 render={(routeProps) => <UpdateEvent
                   {...routeProps}
+                  userURL={this.props.match.url}
                 />}
               />
               <Route
                 exact path={this.props.match.url}
-                render={() => <Query query={ALL_EVENTS_QUERY}>
+                render={() => <Query query={ALL_USER_EVENTS_QUERY}>
                   {({ data, error, loading}) => {
                     if(loading) return <Spin size="large"/>
                     if(error) return <p>Error: {error.message}</p>
@@ -287,4 +252,4 @@ class Profile extends Component {
 
 
 export default Profile
-export {ALL_EVENTS_QUERY}
+export {ALL_USER_EVENTS_QUERY}

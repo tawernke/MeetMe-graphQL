@@ -111,6 +111,7 @@ class UpdateEvent extends Component {
         ...this.state.newEvent
       }
     })
+    this.props.history.push(this.props.userURL)
   }
   
   render() {

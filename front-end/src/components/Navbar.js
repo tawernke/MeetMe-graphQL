@@ -8,10 +8,6 @@ const usernameStorageKey = 'USERNAME'
 
 class Navbar extends Component {
 
-  state = {
-    homeUrl: ''
-  }
-
   componentDidMount() {
     if (localStorage.getItem('USERNAME') !== null) {
       let url = '/' + JSON.parse(localStorage.getItem(usernameStorageKey)).id

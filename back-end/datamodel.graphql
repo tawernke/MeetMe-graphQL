@@ -32,7 +32,7 @@ type Event {
   end: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  user: [User]!
+  user: [User!]
 }
 
 type Place {

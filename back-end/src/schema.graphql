@@ -6,7 +6,7 @@ type SuccessMessage {
 }
 
 type Mutation {
-  createEvent(title: String, location: String, description: String, start: String, end: String): Event!
+  createEvent(title: String, location: String, description: String, start: String, end: String, user: [ID]): Event!
   updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String): Event!
   deleteEvent(id: ID!): Event
   updateUser(id: ID!, image: String!): User!
@@ -35,13 +35,14 @@ type Mutation {
 }
 
 type Query {
-  events: [Event]!
+  events(userId: ID): [Event]
   event(where: EventWhereUniqueInput!): Event
   # places(where: String): [Place]!
-  places(userId: ID!, type: String!): [Place]!
+  places(userId: ID, type: String): [Place]!
   # places(userId: ID!): [Place]!
   preferences: [Preference]!
   user(id: ID!): User!
+  users: [User]
   me: User
 }
 
@@ -51,4 +52,15 @@ type User {
   email: String!
   permissions: [Permission!]!
   places: [Place]
+  event: [Event]
+}
+
+type Event {
+  id: ID
+  title: String
+  location: String
+  description: String
+  start: String
+  end: String
+  user: [User]
 }

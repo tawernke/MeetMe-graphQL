@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Mutation } from 'react-apollo'
+import { Mutation, Query } from 'react-apollo'
 import moment from 'moment'
 import MultiSelect from './MultiSelect'
 import { DatePicker, TimePicker } from 'antd'
@@ -13,6 +13,7 @@ const CREATE_EVENT_MUTATION = gql `
     $description: String
     $start: String
     $end: String
+    $user: [ID]
   ) {
     createEvent(
       title: $title
@@ -20,6 +21,7 @@ const CREATE_EVENT_MUTATION = gql `
       description: $description
       start: $start
       end: $end
+      user: $user
     ) {
       id
       title
@@ -34,50 +36,44 @@ const CREATE_EVENT_MUTATION = gql `
     }
   }
 `
+const ALL_USERS_QUERY = gql`
+ query {
+   users {
+     id
+     name
+   }
+ }
+`
 
 class EventDetails extends Component {
 
   state = {
     eventDetails: {},
     userNames: [],
-    isLoading: true,
     newEvent: {}
   }
 
-  // componentDidMount() {
-  //   if (!isNaN(this.props.match.params.eventId)) {
-  //   axios
-  //     .get(`http://localhost:8080/event/${Number(this.props.match.params.eventId)}`)
-  //     .then(results => {
-  //       const defaultUserNames = results.data.users.map(user => {
-  //         return user.name
-  //       })
-  //       this.setState({
-  //         eventDetails: results.data,
-  //         userNames: defaultUserNames,
-  //         isLoading: false
-  //       })
-  //     })
-  //   } else {
-  //     this.setState({
-  //       isLoading: false
-  //     })
-  //   }
-  // }
+  addUsersToState = userIds => {
+    const newState = {...this.state.newEvent}
+    newState.user = userIds
+    this.setState({
+      newEvent: newState
+    })
+  }
 
-  startDateChange = (moment) => {
+  startDateChange = moment => {
     this.dateChange(moment, 'start')
   }
 
-  endDateChange = (moment) => {
+  endDateChange = moment => {
     this.dateChange(moment, 'end')
   }
 
-  startTimeChange = (moment) => {
+  startTimeChange = moment => {
     this.timeChange(moment, 'start')
   }
 
-  endTimeChange = (moment) => {
+  endTimeChange = moment => {
     this.timeChange(moment, 'end')
   }
 
@@ -107,7 +103,6 @@ class EventDetails extends Component {
   }
 
   handleChange = e => {
-    // console.log(this.props.match.url.substring(0, 2))
     const { name, type, value } = e.target
     let newState = this.state.newEvent
     newState[name] = value
@@ -120,7 +115,10 @@ class EventDetails extends Component {
     const {location, start, end, title, description} = this.state.eventDetails
     const {deleteEvent} = this.props
     return (
-      <Mutation mutation={CREATE_EVENT_MUTATION} variables={this.state.newEvent}>
+      <Mutation 
+        mutation={CREATE_EVENT_MUTATION} 
+        variables={this.state.newEvent}
+        >
         {(createEvent, { loading, error}) => {
           return(
           <div className="eventDetails">
@@ -128,7 +126,6 @@ class EventDetails extends Component {
             <form onSubmit={async e => {
               e.preventDefault()
               const res = await createEvent()
-              console.log(res)
               this.props.history.push(this.props.match.url.substring(0, 2))
             }}>
               <fieldset disabled={loading} aria-busy={loading}>
@@ -173,38 +170,43 @@ class EventDetails extends Component {
                     <p>From:</p>
                     <DatePicker 
                       onChange={this.startDateChange}
-                      defaultValue={start ? moment(start) : this.props.state.selectedDate}
+                      defaultValue={moment(start) || this.props.state.selectedDate}
                       />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.startTimeChange}
                       minuteStep={30}
-                      defaultValue={start ? moment(start, 'HH:mm Z') : this.props.state.selectedDate}
+                      defaultValue={moment(start, 'HH:mm Z') || this.props.state.selectedDate}
                       />
                   </div>
                   <div className="col">
                     <p>To:</p>
                     <DatePicker 
                       onChange={this.endDateChange}
-                      defaultValue={end ? moment(end) : this.props.state.selectedDateEnd}
+                      defaultValue={moment(end) || this.props.state.selectedDateEnd}
                     />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.endTimeChange}
                       minuteStep={30}
-                      defaultValue={end ? moment(end, 'HH:mm Z') : this.props.state.selectedDateEnd}
+                      defaultValue={moment(end, 'HH:mm Z') || this.props.state.selectedDateEnd}
                     />
                   </div>
                 </div>
                 <div className="row user-select">
                   <div className="col">
                     <p>Select Users:</p>
-                    {/* <MultiSelect 
-                      users={this.props.users}
-                      currentEventUserNames={this.state.userNames}
-                      selectedUsers={this.props.selectedUsers}
-                      eventUsers={this.state.eventDetails.users}
-                      /> */}
+                    <Query query={ALL_USERS_QUERY}>
+                      {({error, loading, data}) => {
+                        if(loading) return <p>Loading...</p>
+                        return (
+                        <MultiSelect 
+                          users={data.users}
+                          addUsersToState={this.addUsersToState}
+                          />
+                        )
+                        }}
+                    </Query>
                   </div>
                   <div className="col">
                   </div>

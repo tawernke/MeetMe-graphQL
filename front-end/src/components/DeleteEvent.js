@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import { ALL_EVENTS_QUERY } from './Profile'
+import { ALL_USER_EVENTS_QUERY } from './Profile'
 
 const DELETE_EVENT_MUTATION = gql`
  mutation DELETE_EVENT_MUTATION($id: ID!) {
@@ -16,14 +16,14 @@ class DeleteEvent extends Component {
   update = (cache, payload) => {
     //manually update the cache on the client so it matches the server
     //1. Query the cache for the events we want
-    const data = cache.readQuery({ query: ALL_EVENTS_QUERY})
+    const data = cache.readQuery({ query: ALL_USER_EVENTS_QUERY})
     console.log(data)
     console.log(typeof(payload.data.deleteEvent.id))
     //2. Filter the deleted event out of the page
     data.events = data.events.filter(event => event.id !== payload.data.deleteEvent.id)
     console.log(data)
     //3. put the events back
-    cache.writeQuery({ query: ALL_EVENTS_QUERY, data})
+    cache.writeQuery({ query: ALL_USER_EVENTS_QUERY, data})
   }
 
   render() {

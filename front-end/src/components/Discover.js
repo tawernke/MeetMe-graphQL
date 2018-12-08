@@ -1,10 +1,29 @@
 import React, { Component } from 'react'
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 import Place from './Place'
 import {Spin} from 'antd'
 
-
+const ALL_PLACES_QUERY = gql`
+  query ALL_PLACES_QUERY($id: ID!) {
+    places(userId: $id) {
+      id
+      address
+      city
+      country
+      image
+      name
+      phone
+      rating
+      state
+      type
+      zip
+      price
+    }
+  }
+`;
 
 const usernameStorageKey = 'USERNAME'
 
@@ -112,6 +131,13 @@ class Discover extends Component {
           <div className="row justify-content-center">
             <div className="card-deck">       
               {placeJSX}
+              {/* <Query query={ALL_PLACES_QUERY} variables={}>
+                  {({ data, error, loading }) => {
+                    if(loading) return <p>Loading..,</p>
+                    if(error) return <p>Error: {error.message}</p>
+
+                }}
+              </Query> */}
             </div>
           </div>
         </div>
