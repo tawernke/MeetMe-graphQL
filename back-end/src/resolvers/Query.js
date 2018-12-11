@@ -3,23 +3,22 @@ const { forwardTo} = require('prisma-binding')
 
 const Query = {
   users: forwardTo('db'),
-  events: forwardTo('db'), //This pulls the function from the prisma.graphql file pulled from the PRISMA server
-  // async items(parent, args, ctx, info) {
-  //   const items = await ctx.db.query.items()
-  //   return items
-  // }
-  // async events(parent, {userId}, ctx, info) {
-  //   const events = await ctx.db.query.places(
-  //     {
-  //       where: { 
-  //         user: { id: userId},
-  //       },
-  //     },
-  //     info
-  //   )
-  //   return events
-  // },
+  // events: forwardTo('db'), //This pulls the function from the prisma.graphql file pulled from the PRISMA server
+  
+  async events(parent, {userId}, ctx, info) {
+    const events = await ctx.db.query.events(
+      {
+        where: { 
+          user_some: { id_contains: userId},
+        },
+      },
+      info
+    )
+    return events
+  },
+  
   event: forwardTo('db'),
+  
   async user(parent, { id }, ctx, info) {
     const places = await ctx.db.query.places(
       {
@@ -44,7 +43,9 @@ const Query = {
     )
     return places
   },
+  
   preferences: forwardTo('db'),
+  
   me(parent, args, ctx, info) {
     //check if there is a current user ID
     if (!ctx.request.userId) {
@@ -56,6 +57,18 @@ const Query = {
       },
       info
     )
+  },
+
+  async user(parent, {id}, ctx, info) {
+    const user = await ctx.db.query.user(
+      {
+        where: {
+          id: id
+        },
+        info
+      }
+    )
+    return user
   },
 }
 

@@ -23,10 +23,14 @@ const ALL_PLACES_QUERY = gql`
 
 class Places extends Component {
   render() {
-    return <Query query={ALL_PLACES_QUERY} variables={{id: this.props.match.params.username, type: this.props.type}}>
+    return (
+      <Query 
+        query={ALL_PLACES_QUERY} 
+        variables={{id: this.props.match.params.username, type: this.props.type}}
+      >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading...</p>;
-          if (error) return <p>Error: {error.message}</p>;
+          if (loading) return <p>Loading...</p>
+          if (error) return <p>Error: {error.message}</p>
           return <div>
               <ul className="your-places-list">
                 {data.places.map(place => (
@@ -39,9 +43,10 @@ class Places extends Component {
                   </li>
                 ))}
               </ul>
-            </div>;
+            </div>
         }}
-      </Query>;
+      </Query>
+    )
   }
 }
 

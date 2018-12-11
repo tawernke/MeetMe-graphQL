@@ -89,6 +89,7 @@ class YourPlaces extends Component {
         }}
       >
         {({data, loading}) => {
+          if (loading) return <p>Loading...</p>;
           return(
             <Mutation
               mutation={UPDATE_USER_MUTATION}
@@ -98,9 +99,9 @@ class YourPlaces extends Component {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error: {error.message}</p>
                 return <React.Fragment>
-                  {/* <h1>Meet {data.user.name}</h1> */}
+                  <h1>Meet {data.user.name}</h1>
                   <PlacesModal visible={this.state.visible} onOk={this.closeModal} onCancel={this.closeModal} place={this.state.place} isLoading={this.state.isLoading} />
-                  {this.state.image ? <img src={this.state.image} alt="" /> : <div className="upload-btn-wrapper">
+                  {this.state.image || data.user.image ? <img src={this.state.image || data.user.image} alt="" /> : <div className="upload-btn-wrapper">
                     <Icon className="upload-icon" type="user-add" />
                     <input type="file" onChange={e => this.uploadPhoto(e, updateUser)} name="myfile" />
                   </div>}

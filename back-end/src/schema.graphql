@@ -48,6 +48,7 @@ type Query {
 
 type User {
   id: ID!
+  image: String
   name: String!
   email: String!
   permissions: [Permission!]!

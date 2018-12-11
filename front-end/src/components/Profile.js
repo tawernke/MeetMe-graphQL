@@ -15,8 +15,8 @@ import '../App.css'
 const usernameStorageKey = 'USERNAME'
 
 const ALL_USER_EVENTS_QUERY = gql `
-  query ALL_USER_EVENTS_QUERY {
-    events{
+  query ALL_USER_EVENTS_QUERY($id: ID!) {
+    events(userId: $id){
       id
       title
       location
@@ -44,32 +44,6 @@ class Profile extends Component {
     eventUserIds: [],
     currentEventUserIds: [],
     usersCalendarsShown: []
-  }
-
-  checkBoxClick = (value) => {
-    if(value.length !== 0) {
-      const selectedUserEvents = this.state.events.filter(event => {
-        let foundUser = event.users.findIndex(user => {
-          return user.id === value[0]
-        })
-        return foundUser !== -1
-      })
-      const newSelectedUserEvents = selectedUserEvents.map(event => {
-        event = { ...event, color: 'red' }
-        return event
-      })
-      this.setState({
-        events: this.state.events.concat(newSelectedUserEvents),
-        additionalCallendars: value
-      })
-    } else {
-      const removeUserEvents = this.state.events.filter(event => {
-        return event.color === '#3A87AD'
-      })
-      this.setState({
-        events: removeUserEvents
-      })
-    }
   }
 
   eventClick = (calEvent) => {
@@ -101,66 +75,7 @@ class Profile extends Component {
     })
   }
 
-  // addEvent = (e) => {
-  //   e.preventDefault()
-  //   const form = e.target
-  //   const newEvent = {
-  //     title: form.title.value,
-  //     start: moment(this.state.selectedDate).format(),
-  //     end: moment(this.state.selectedDateEnd).format(),
-  //     location: form.location.value,
-  //     description: form.description.value,
-  //     users: this.state.eventUserIds !== 0 ? this.state.eventUserIds : this.state.currentEventUserIds,
-  //     allDay: false
-  //   }
-  //   if (this.props.location.pathname.includes('newEvent')) {
-  //     axios
-  //       .post('http://localhost:8080/addEvent', newEvent)
-  //       .then(response => {
-  //         this.setState({
-  //           events: this.state.events.concat(response.data),
-  //           isLoading: false
-  //         }, () => this.props.history.push(this.props.match.url))
-  //       })
-  //   } else {
-  //     const newState = [...this.state.events]
-  //     const pos = newState.findIndex((event, i) => {
-  //       return event.id === this.state.currentEvent.id
-  //     })
-  //     newState[pos] = newEvent
-  //     newState[pos].id = this.state.currentEvent.id
-  //     axios
-  //       .post('http://localhost:8080/updateEvent', newState[pos])
-  //       .then(response => {
-  //         this.setState({
-  //           events: newState
-  //         }, () => this.props.history.push(this.props.match.url))
-  //       })
-  //   }
-  // }
-
-  // deleteEvent = () => {
-  //   const deletedEventId = this.state.currentEvent.id
-  //   const remainingEvents = this.state.events.filter(event => event.id !== deletedEventId)
-  //   let userIdsArray = []
-  //   this.state.currentEvent.users.forEach(user => {
-  //     userIdsArray.push(user.id)
-  //   })
-  //   const deleteObj = {}
-  //   deleteObj.eventId = deletedEventId
-  //   deleteObj.userIds = userIdsArray
-  //   this.setState({
-  //     events: remainingEvents,
-  //     currentEvent: {}
-  //   }, () => this.props.history.push(this.props.match.url))
-  //   axios.delete('http://localhost:8080/deleteEvent', {data: deleteObj})
-  //     .then(response => {
-  //       console.log(response)
-  //     })
-  // }
-
   eventDrop = (event) => {
-    console.log(event)
     event.start = event.start
     const shiftedEvent = {
       id: event.id,
@@ -216,7 +131,7 @@ class Profile extends Component {
               />
               <Route
                 exact path={this.props.match.url}
-                render={() => <Query query={ALL_USER_EVENTS_QUERY}>
+                render={() => <Query query={ALL_USER_EVENTS_QUERY} variables={{id: this.props.match.params.username}}>
                   {({ data, error, loading}) => {
                     if(loading) return <Spin size="large"/>
                     if(error) return <p>Error: {error.message}</p>
