@@ -26,6 +26,8 @@ type Mutation {
     phone: String
     price: String
   ): Place!
+  requestReset(email: String!): SuccessMessage
+  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 }
 
 type Mutation {

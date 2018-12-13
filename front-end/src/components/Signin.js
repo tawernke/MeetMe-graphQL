@@ -17,7 +17,7 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
-class Homepage extends Component {
+class Signin extends Component {
   state = {
     email: "",
     name: "",
@@ -66,4 +66,4 @@ class Homepage extends Component {
   }
 }
 
-export default Homepage
+export default Signin

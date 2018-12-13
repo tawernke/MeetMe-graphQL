@@ -12,8 +12,6 @@ import YourPlaces from './YourPlaces'
 import '../fullcalendar.min.css'
 import '../App.css'
 
-const usernameStorageKey = 'USERNAME'
-
 const ALL_USER_EVENTS_QUERY = gql `
   query ALL_USER_EVENTS_QUERY($id: ID!) {
     events(userId: $id){

@@ -28,9 +28,15 @@ class Signup extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  update = (cache, payload) => {
-    const user = cache.readQuery({ query: CURRENT_USER_QUERY })
-    console.log(user)
+  signUp = async (e, signUpMuation) => {
+    e.preventDefault()
+    const res = await signUpMuation();
+    this.props.history.push(`/${res.data.signup.id}`)
+    this.setState({
+      name: '',
+      email: '',
+      password: ''
+    })
   }
 
   render() {
@@ -38,27 +44,16 @@ class Signup extends Component {
       <Mutation
         mutation={SIGNUP_MUTATION}
         variables={this.state}
-        update={this.update}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
         {(signup, { error, loading }) => (
-            <form
-              method="post"
-              onSubmit={async e => {
-                e.preventDefault()
-                await signup()
-                this.setState({
-                  name: '',
-                  email: '',
-                  password: ''
-                })
-              }}>
+            <form method="post" onSubmit={e => this.signUp(e, signup)}>
               <fieldset disabled={loading} aria-busy={loading}>
                 <h2>Sign up for an account</h2>
-                {/* <p>{error}</p> */}
+                <p>{error}</p>
                 <input name="email" className="form-control" placeholder="email" onChange={this.saveToState} />
                 <input name="name" className="form-control" placeholder="name" onChange={this.saveToState} />
-                <input name="password" className="form-control" placeholder="password" onChange={this.saveToState} />
+                <input name="password" className="form-control" placeholder="password" type="password" onChange={this.saveToState} />
                 <button type="submit" className="btn btn-primary logon-button">
                   Signup
                 </button>
