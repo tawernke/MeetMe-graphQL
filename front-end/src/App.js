@@ -1,19 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import Signin from './components/Signin'
-import Profile from './components/Profile'
-import Discover from './components/Discover'
-import Signup from './components/Signup'
-import {Route, Switch, Link} from 'react-router-dom'
-import Signout from './components/Signout'
+import Signin from "./components/Signin";
+import Profile from "./components/Profile";
+import Discover from "./components/Discover";
+import Signup from "./components/Signup";
+import { Route, Switch, Link } from "react-router-dom";
 import PleaseSignIn from "./components/PleaseSignIn";
+import Navbar from "./components/Navbar";
 import RequestReset from "./components/RequestReset";
 import Reset from "./components/Reset";
-import './App.css'
-import { Layout, Menu } from "antd";
-
-const { Header } = Layout;
+import "./App.css";
 
 const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY {
@@ -34,45 +31,57 @@ const ALL_PLACES_QUERY = gql`
 `;
 
 class App extends Component {
-  
   render() {
-    // const {loggedInUser, imageChange} = this.state
-    return <div>
-        {/* <Navbar history={this.props.history} /> */}
-        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            // defaultSelectedKeys={['2']}
-            style={{ lineHeight: '64px' }}
-          >
-            <Menu.Item key="1"><Link to="/cjp9cm4zp75tx0a36oh4d614w">Home</Link></Menu.Item>
-            <Menu.Item key="2"><Link to="/discover">Discover</Link></Menu.Item>
-            <Menu.Item key="3"><Signout/></Menu.Item>
-          </Menu>
-        </Header>
+    return (
+      <div>
+        <Navbar history={this.props.history} />
         <div className="app">
           <Switch>
-            <Route exact path="/" render={() => <Signin history={this.props.history}/>} />
-            <Route path="/signup" render={(routeProps) => <Signup {...routeProps} />} />
-            <Route path="/resetPassword/:resetToken" render={(routeProps) => <Reset {...routeProps}/>} />
-            <Route path="/resetPassword/" render={(routeProps) => <RequestReset {...routeProps}/>} />
-            <PleaseSignIn>
+            <Route
+              exact
+              path="/"
+              render={(routeProps) => <Signin {...routeProps} />}
+            />
+            <Route exact path="/discover" render={() => <Discover />} />
+            <Route
+              path="/signup"
+              render={routeProps => <Signup {...routeProps} />}
+            />
+            <Route
+              path="/resetPassword/:resetToken"
+              render={routeProps => <Reset {...routeProps} />}
+            />
+            <Route
+              path="/resetPassword/"
+              render={routeProps => <RequestReset {...routeProps} />}
+            />
+            <PleaseSignIn history={this.props.history}>
               <Query query={ALL_PLACES_QUERY}>
                 {({ data, error, loading }) => {
-                  if(loading) return <p>Loading..,</p>
-                  if(error) return <p>Error: {error.message}</p>
-                return <Switch>
-                    <Route path="/:username" render={routeProps => <Profile {...routeProps} {...this.state} showModal={this.showModal} />} />
-                    <Route path="/discover" render={() => <Discover savedPlaces={data.places} />} />
-                  </Switch>;}}
+                  if (loading) return <p>Loading..,</p>;
+                  if (error) return <p>Error: {error.message}</p>;
+                  return (
+                    <Switch>
+                      <Route
+                        path="/:username"
+                        render={routeProps => (
+                          <Profile
+                            {...routeProps}
+                            {...this.state}
+                            showModal={this.showModal}
+                          />
+                        )}
+                      />
+                    </Switch>
+                  );
+                }}
               </Query>
             </PleaseSignIn>
           </Switch>
         </div>
-      </div>;
+      </div>
+    );
   }
 }
 
-export default App
+export default App;

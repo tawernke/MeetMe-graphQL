@@ -5,37 +5,27 @@ import 'antd/dist/antd.css'
 const Option = Select.Option;
 
 class MultiSelect extends Component {
-
-  usersChange = (userId, allUsers) => {
-    // const userIds = allUsers.map(user => {
-    //   if(isNaN(Number(user.key))) {
-    //      const oldUser =  this.props.eventUsers.find(userObj => {
-    //        return user.key === userObj.name
-    //      })
-    //      return oldUser.id
-    //   } else {
-    //     return Number(user.key)
-    //   }
-    // })
-    // console.log(userIds)
-    // this.props.selectedUsers(userIds)
-    console.log(userId)
-  }
   
   render() {
-    const usersJSX = this.props.users.map(user => {
-      return <Option key={user.id}>{user.name}</Option>
-    })
+    const allUsersJSX = this.props.allUsers.map(user => {
+      return <Option key={user.id}>{user.name}</Option>;
+    });
+    let users
+    if(this.props.eventUsers) {
+      users = this.props.eventUsers.map(user => {
+        return user.id
+      })
+    }
     return(
       <div className="multi-select-div">
         <Select
           mode="multiple"
-          defaultValue={this.props.currentEventUserNames}
+          defaultValue={users}
           style={{ width: '100%', height: '50px' }}
           placeholder="Please select"
           onChange={this.props.addUsersToState}
           >
-          {usersJSX}
+          {allUsersJSX}
         </Select>
       </div>
     )

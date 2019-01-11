@@ -94,6 +94,7 @@ class YourPlaces extends Component {
             <Mutation
               mutation={UPDATE_USER_MUTATION}
               variables={{ id: this.props.match.params, image: "test" }}
+              refetchQueries={[{ SINGLE_USER_QUERY }]}
             >
               {(updateUser, { loading, error }) => {
                 if (loading) return <p>Loading...</p>

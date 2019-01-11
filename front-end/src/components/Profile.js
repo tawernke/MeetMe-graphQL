@@ -12,7 +12,7 @@ import YourPlaces from './YourPlaces'
 import '../fullcalendar.min.css'
 import '../App.css'
 
-const ALL_USER_EVENTS_QUERY = gql `
+const ALL_USER_EVENTS_QUERY = gql`
   query ALL_USER_EVENTS_QUERY($id: ID!) {
     events(userId: $id){
       id
@@ -32,46 +32,31 @@ const ALL_USER_EVENTS_QUERY = gql `
 class Profile extends Component {
   
   state = {
-    selectedDate: "",
-    currentEvent: {},
-    events: [],
-    userDetailsAndPlaces: {},
-    isLoading: true,
-    currentUser: {},
-    redirect: false,
-    eventUserIds: [],
-    currentEventUserIds: [],
-    usersCalendarsShown: []
+    selectedDateStart: {}
   }
 
   eventClick = (calEvent) => {
     this.props.history.push(`${this.props.match.url}/updateEvent/${calEvent.id}`)
   }
 
-  selectedUsers = (userIds) => {
-    this.setState({
-      eventUserIds: userIds
-    })
-  }
+  // timeChange = (time, boundary) => {
+  //   this.setState({
+  //     [boundary]: moment(this.state[boundary]).set({
+  //       'hour': moment(time).format("HH"),
+  //       'minute': moment(time).format("mm")
+  //     })
+  //   })
+  // }
 
-  timeChange = (time, boundary) => {
-    this.setState({
-      [boundary]: moment(this.state[boundary]).set({
-        'hour': moment(time).format("HH"),
-        'minute': moment(time).format("mm")
-      })
-    })
-  }
-
-  dateChange = (date, boundary) => {
-    this.setState({
-      [boundary]: moment(date).set({
-        year: moment(date).format("YYYY"),
-        month: moment(date).format("MM"),
-        date: moment(date).format("DD")
-      })
-    })
-  }
+  // dateChange = (date, boundary) => {
+  //   this.setState({
+  //     [boundary]: moment(date).set({
+  //       year: moment(date).format("YYYY"),
+  //       month: moment(date).format("MM"),
+  //       date: moment(date).format("DD")
+  //     })
+  //   })
+  // }
 
   eventDrop = (event) => {
     event.start = event.start
@@ -86,6 +71,9 @@ class Profile extends Component {
   }
 
   dayClick = (date) => {
+    this.setState({
+      selectedDateStart: date
+    })
     this.props.history.push(this.props.match.url + '/newEvent')
   }
 
@@ -107,13 +95,8 @@ class Profile extends Component {
               <Route
                 path={this.props.match.url + "/newEvent"}
                 render={(routeProps) => <EventDetails
-                  addEvent={this.addEvent}
-                  state={this.state}
-                  deleteEvent={this.deleteEvent}
-                  users={this.props.users}
-                  currentUser={this.props.currentUser}
                   {...routeProps}
-                  selectedDate={this.selectedDate}
+                  selectedDateStart={this.state.selectedDateStart}
                   selectedUsers={this.selectedUsers}
                   timeChange={this.timeChange}
                   dateChange={this.dateChange}
@@ -124,14 +107,14 @@ class Profile extends Component {
                 path={this.props.match.url + "/updateEvent/:eventId"}
                 render={(routeProps) => <UpdateEvent
                   {...routeProps}
-                  userURL={this.props.match.url}
+                  userId={this.props.match.params.username}
                 />}
               />
               <Route
                 exact path={this.props.match.url}
-                render={() => <Query query={ALL_USER_EVENTS_QUERY} variables={{id: this.props.match.params.username}}>
+                render={() => <Query fetchPolicy={'network-only'} query={ALL_USER_EVENTS_QUERY} variables={{id: this.props.match.params.username}}>
                   {({ data, error, loading}) => {
-                    if(loading) return <Spin size="large"/>
+                    if(loading) return null
                     if(error) return <p>Error: {error.message}</p>
                     return <FullCalendar
                         id = "your-custom-ID"

@@ -26,21 +26,24 @@ class DeleteEvent extends Component {
     cache.writeQuery({ query: ALL_USER_EVENTS_QUERY, data})
   }
 
+  deleteEvent = async (e, deleteEventMutation) => {
+    e.preventDefault();
+    if(window.confirm('Are you sure you want to delete this event?')) {
+      await deleteEventMutation();
+    }
+    this.props.history.push(`/${this.props.userId}`);
+  }
+
   render() {
     return (
       <Mutation
         mutation={DELETE_EVENT_MUTATION}
-        variables={{id: this.props.id}}
+        variables={{id: this.props.eventId}}
         update={this.update}
       >
       {(deleteEvent, {error}) => {
         return(
-        <button type="submit" className="btn btn-danger" onClick={() => {
-          if(window.confirm('Are you sure you want to delete this event?')) {
-            deleteEvent()
-            this.props.history.push(this.props.match.url.substring(0, 2))
-          }
-        }}>Delete Event</button>
+        <button type="submit" className="btn btn-danger" onClick={(e) => this.deleteEvent(e, deleteEvent)}>Delete Event</button>
         )}}
       </Mutation>
     );

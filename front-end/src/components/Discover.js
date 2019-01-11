@@ -1,10 +1,58 @@
 import React, { Component } from 'react'
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { setContext } from 'apollo-link-context';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 import Place from './Place'
 import {Spin} from 'antd'
+
+const httpLink = createHttpLink({
+  uri: "https://api.yelp.com/v3/graphql",
+  fetchOptions: {
+    mode: "no-cors"
+  }
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = "G3wgONB3yQZcQIhCsnr7kB99qo0uUKz1PeAzHbeWv2_AGYfNMNyfrGAVwJe_ZmNwLS9_HO5O26tSQ7b8Yur4lCJeqFR5Wwiv81x_h-cnuynrWY6npJFNzK3imRQSXHYx";
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: `Bearer ${token}`,
+      // 'Content-Type': 'application/graphql',
+    }
+  }
+});
+
+const yelpClient = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+})
+
+const YELP_PLACES_QUERY = gql`
+  query YELP_PLACES_QUERY{
+    search(term: "burrito", location: "san francisco") {
+    total
+    business {
+      name
+      rating
+      review_count
+      location {
+        address1
+        city
+        state
+        country
+      }
+    }
+  }
+}
+`
 
 const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY($id: ID!) {
@@ -25,8 +73,6 @@ const ALL_PLACES_QUERY = gql`
   }
 `;
 
-const usernameStorageKey = 'USERNAME'
-
 class Discover extends Component {
   
   state = {
@@ -40,28 +86,28 @@ class Discover extends Component {
     showingSearchResults: false
   }
 
-  componentDidMount() {
-    const location = new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(pos => {
-        const coord = {
-          lat: pos.coords.latitude,
-          long: pos.coords.longitude
-        }
-        resolve(coord)
-      })
-    })
-    location
-      .then(res => {
-        axios
-          .get(`http://localhost:8080/discover/${res.lat}/${res.long}/`)
-          .then(response => {
-            this.setState({
-              placeSuggestions: response.data.businesses,
-              isLoading: false,
-            })
-          })
-      })
-  }
+  // componentDidMount() {
+  //   const location = new Promise((resolve, reject) => {
+  //     navigator.geolocation.getCurrentPosition(pos => {
+  //       const coord = {
+  //         lat: pos.coords.latitude,
+  //         long: pos.coords.longitude
+  //       }
+  //       resolve(coord)
+  //     })
+  //   })
+  //   location
+  //     .then(res => {
+  //       axios
+  //         .get(`http://localhost:8080/discover/${res.lat}/${res.long}/`)
+  //         .then(response => {
+  //           this.setState({
+  //             placeSuggestions: response.data.businesses,
+  //             isLoading: false,
+  //           })
+  //         })
+  //     })
+  // }
 
   searchPlaces = (e) => {
     e.preventDefault()
@@ -112,8 +158,13 @@ class Discover extends Component {
     })
     const {streetNumber, street, city, showingSearchResults} = this.state
     return(
-
-      <div className="discover-page">
+      <Query query={YELP_PLACES_QUERY} client={yelpClient}>
+        {({data, error, loading}) => {
+          if(loading) return <p>Loading..,</p>
+          if(error) return <p>Error: {error.message}</p>
+          console.log(data)
+          return (
+          <div className="discover-page">
         {this.state.isLoading ? <div className="discover-spin">{<Spin size="large" />}</div> :
         <div>
         {showingSearchResults ? <h4 className="discover-search-heading">Search Results</h4> :
@@ -144,6 +195,8 @@ class Discover extends Component {
         </div>
         }
       </div>
+          )}}
+      </Query>
     )
   }
 }

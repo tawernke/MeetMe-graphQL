@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { randomBytes } = require('crypto')
-const {promisify} = require('util')
-const { transport, makeANiceEmail } = require('../mail')
+const { randomBytes } = require("crypto");
+const { promisify } = require("util");
+const { transport, makeANiceEmail } = require("../mail");
 
 const Mutations = {
   //Event Muatations
@@ -11,13 +11,13 @@ const Mutations = {
     const idsArray = args.user.map(user => {
       return {
         id: user
-      }
-    })
-    delete args.user
+      };
+    });
+    delete args.user;
     // if (!ctx.request.userId) {
     //   throw new Error("You must be logged in to do that");
     // }
-    
+
     //ctx.db accesses the db (seeing as it's available on context), call query or mutation, then reference the method
     const event = await ctx.db.mutation.createEvent(
       {
@@ -35,21 +35,51 @@ const Mutations = {
     return event;
   },
 
-  updateEvent(parent, args, ctx, info) {
-    //first take a copy of the updates
+  async updateEvent(parent, args, ctx, info) {
+    const newUserIds = args.user ? args.user.map(user => {
+      return { id: user };
+    }): null
+    delete args.user;
     const updates = { ...args };
-    //remove the ID from the updates copy
+    const oldEventDetails = await ctx.db.query.event(
+      {where: {id: updates.id}},
+      `{
+        id,
+        user {
+          id
+        }
+      }`
+    );
     delete updates.id;
-    //run the update method
-    return ctx.db.mutation.updateEvent(
+    const disconnectOldUsers = await ctx.db.mutation.updateEvent(
       {
-        data: updates,
+        data: {
+          user: {
+            disconnect: oldEventDetails.user.map(user => {
+              return { id: user.id }
+            }),
+          },
+        },
         where: {
           id: args.id
         }
       },
       info
     );
+    const updatedEvent =  await ctx.db.mutation.updateEvent(
+      {
+        data: {
+          user: {
+            connect: newUserIds || oldEventDetails.user
+          },
+          ...updates
+        },
+        where: {
+          id: args.id
+        }
+      }, info
+    )
+    return updatedEvent
   },
 
   updateUser(parent, args, ctx, info) {
@@ -154,7 +184,7 @@ const Mutations = {
     // 5. Return the user
     return user;
   },
-  
+
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie("token");
     return { message: "Goodbye!" };
@@ -169,23 +199,25 @@ const Mutations = {
     //2. Set a reset token and expiry on that user
     const randomBytesPromiseified = promisify(randomBytes);
     const resetToken = (await randomBytesPromiseified(20)).toString("hex");
-    const resetTokenExpiry = Date.now() + 3600000 //1 hour from now
+    const resetTokenExpiry = Date.now() + 3600000; //1 hour from now
     const res = await ctx.db.mutation.updateUser({
       where: { email: args.email },
       data: { resetToken, resetTokenExpiry }
     });
     //3. Email them that reset
     const mailRes = await transport.sendMail({
-      from: 't.a.wernke@gmail.com',
+      from: "t.a.wernke@gmail.com",
       to: user.email,
       subject: "Your password reset token",
       html: makeANiceEmail(`Your Password Reset Token is here! 
         \n\n 
-        <a href="${process.env.FRONTEND_URL}/resetPassword/${resetToken}">Click Here to Reset your Password</a>`)
-    })
+        <a href="${
+          process.env.FRONTEND_URL
+        }/resetPassword/${resetToken}">Click Here to Reset your Password</a>`)
+    });
 
     // 4. Return a message
-    return { message: 'Thanks' }
+    return { message: "Thanks" };
   },
 
   async resetPassword(parent, args, ctx, info) {
@@ -200,11 +232,11 @@ const Mutations = {
     const [user] = await ctx.db.query.users({
       where: {
         resetToken: args.resetToken,
-        resetTokenExpiry_gte: Date.now() - 3600000,
-      },
+        resetTokenExpiry_gte: Date.now() - 3600000
+      }
     });
     if (!user) {
-      throw new Error('This token is either invalid or expired!');
+      throw new Error("This token is either invalid or expired!");
     }
     // 4. Hash their new password
     const password = await bcrypt.hash(args.password, 10);
@@ -214,20 +246,19 @@ const Mutations = {
       data: {
         password,
         resetToken: null,
-        resetTokenExpiry: null,
-      },
+        resetTokenExpiry: null
+      }
     });
     // 6. Generate JWT
     const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
     // 7. Set the JWT cookie
-    ctx.response.cookie('token', token, {
+    ctx.response.cookie("token", token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365,
+      maxAge: 1000 * 60 * 60 * 24 * 365
     });
     // 8. return the new user
     return updatedUser;
-
-  },
+  }
 };
 
 module.exports = Mutations;

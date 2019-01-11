@@ -3,7 +3,6 @@ import { Mutation, Query } from 'react-apollo'
 import moment from 'moment'
 import MultiSelect from './MultiSelect'
 import { DatePicker, TimePicker } from 'antd'
-import 'antd/dist/antd.css'
 import gql from 'graphql-tag'
 
 const CREATE_EVENT_MUTATION = gql `
@@ -53,6 +52,15 @@ class EventDetails extends Component {
     newEvent: {}
   }
 
+  componentDidMount() {
+    this.setState({
+      newEvent: {
+        start: this.props.selectedDateStart,
+        end: this.props.selectedDateStart
+      }
+    });
+  }
+
   addUsersToState = userIds => {
     const newState = {...this.state.newEvent}
     newState.user = userIds
@@ -78,10 +86,12 @@ class EventDetails extends Component {
   }
 
   timeChange = (time, boundary) => {
+    console.log(time.format())
+    console.log(boundary)
     //Time isn't being set correctly here
     let newState = this.state.newEvent
-    newState[boundary] = moment(this.state[boundary]).set({
-        'hour': moment(time).format("HH"),
+    newState[boundary] = moment(newState[boundary]).set({
+        'hour': moment(time).format("hh"),
         'minute': moment(time).format("mm")
       }).format()
     this.setState({
@@ -113,7 +123,7 @@ class EventDetails extends Component {
   
   render() {
     const {location, start, end, title, description} = this.state.eventDetails
-    const {deleteEvent} = this.props
+    const { deleteEvent, selectedDateStart} = this.props
     return (
       <Mutation 
         mutation={CREATE_EVENT_MUTATION} 
@@ -170,26 +180,26 @@ class EventDetails extends Component {
                     <p>From:</p>
                     <DatePicker 
                       onChange={this.startDateChange}
-                      defaultValue={moment(start) || this.props.state.selectedDate}
+                      defaultValue={moment(selectedDateStart, 'YYYY-MM-DD')}
                       />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.startTimeChange}
                       minuteStep={30}
-                      defaultValue={moment(start, 'HH:mm Z') || this.props.state.selectedDate}
+                      defaultValue={moment(selectedDateStart, 'HH:mm:ss')}
                       />
                   </div>
                   <div className="col">
                     <p>To:</p>
                     <DatePicker 
                       onChange={this.endDateChange}
-                      defaultValue={moment(end) || this.props.state.selectedDateEnd}
+                      defaultValue={moment(selectedDateStart, 'YYYY-MM-DD')}
                     />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.endTimeChange}
                       minuteStep={30}
-                      defaultValue={moment(end, 'HH:mm Z') || this.props.state.selectedDateEnd}
+                      defaultValue={moment(selectedDateStart, 'HH:mm:ss')}
                     />
                   </div>
                 </div>
@@ -201,7 +211,7 @@ class EventDetails extends Component {
                         if(loading) return <p>Loading...</p>
                         return (
                         <MultiSelect 
-                          users={data.users}
+                          allUsers={data.users}
                           addUsersToState={this.addUsersToState}
                           />
                         )
@@ -216,7 +226,7 @@ class EventDetails extends Component {
                     <button className="btn btn-danger" onClick={deleteEvent}>Delete</button>
                   </div>
                   <div className="col">
-                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button type="submit" className="btn btn-primary">Sav{loading ? 'ing' : 'e'}</button>
                   </div>
                 </div>
               </fieldset>
@@ -228,5 +238,6 @@ class EventDetails extends Component {
   }
 }
 
+export { ALL_USERS_QUERY }
 export default EventDetails
 

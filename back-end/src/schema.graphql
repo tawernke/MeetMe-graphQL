@@ -7,7 +7,7 @@ type SuccessMessage {
 
 type Mutation {
   createEvent(title: String, location: String, description: String, start: String, end: String, user: [ID]): Event!
-  updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String): Event!
+  updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String, user: [ID]): Event!
   deleteEvent(id: ID!): Event
   updateUser(id: ID!, image: String!): User!
   signup(email: String!, password: String!, name: String!): User!
