@@ -2,13 +2,20 @@ import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
 import MultiSelect from "./MultiSelect";
-import { DatePicker, TimePicker } from "antd";
 import "antd/dist/antd.css";
 import gql from "graphql-tag";
 import DeleteEvent from "./DeleteEvent";
 import { ALL_USERS_QUERY } from "./EventDetails";
 import ALL_USER_EVENTS_QUERY from "./Profile";
 import Event from "../styles/Event";
+import MyDatePicker from './MyDatePicker'
+import MyTimePicker from './MyTimePicker'
+
+const LOCAL_STATE_QUERY = gql`
+  query {
+    eventTimes @client
+  }
+`
 
 const SINGLE_EVENT_QUERY = gql`
   query SINGLE_EVENT_QUERY($id: ID!) {
@@ -62,49 +69,21 @@ const UPDATE_EVENT_MUTATION = gql`
 
 class UpdateEvent extends Component {
   state = {
-    newEvent: {}
-  };
-
-  startDateChange = moment => {
-    this.dateChange(moment, "start");
-  };
-
-  endDateChange = moment => {
-    this.dateChange(moment, "end");
-  };
-
-  startTimeChange = moment => {
-    this.timeChange(moment, "start");
-  };
-
-  endTimeChange = moment => {
-    this.timeChange(moment, "end");
+    newEvent: {
+    }
   };
 
   timeChange = (time, boundary) => {
-    //Time isn't being set correctly here
     let newState = this.state.newEvent;
-    newState[boundary] = moment(this.state[boundary])
-      .set({
-        hour: moment(time).format("HH"),
-        minute: moment(time).format("mm")
-      })
-      .format();
+    newState[boundary] = moment(time).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
       newEvent: newState
     });
   };
 
   dateChange = (date, boundary) => {
-    //Date isn't being set correctly here
     let newState = this.state.newEvent;
-    newState[boundary] = moment(date)
-      .set({
-        year: moment(date).format("YYYY"),
-        month: moment(date).format("MM"),
-        date: moment(date).format("DD")
-      })
-      .format();
+    newState[boundary] = moment(date).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
       newEvent: newState
     });
@@ -166,37 +145,76 @@ class UpdateEvent extends Component {
           return (
             <Mutation mutation={UPDATE_EVENT_MUTATION} update={this.update}>
               {(updateEvent, { loading, error }) => {
-                return <div className="eventDetails">
+                return (
+                  <div className="eventDetails">
                     <Event onSubmit={e => this.updateEvent(e, updateEvent)}>
                       <h1>Update Event</h1>
                       <fieldset disabled={loading} aria-busy={loading}>
                         <div className="row">
                           <div className="col">
                             <p>Title:</p>
-                            <input name="title" className="form-control placeholder-text" defaultValue={event.title} placeholder="Add title Here" onChange={this.handleChange} />
+                            <input
+                              name="title"
+                              className="form-control placeholder-text"
+                              defaultValue={event.title}
+                              placeholder="Add title Here"
+                              onChange={this.handleChange}
+                            />
                           </div>
                           <div className="col">
                             <p>Location:</p>
-                            <input name="location" className="form-control placeholder-text" defaultValue={event.location} placeholder="Add location Here" onChange={this.handleChange} />
+                            <input
+                              name="location"
+                              className="form-control placeholder-text"
+                              defaultValue={event.location}
+                              placeholder="Add location Here"
+                              onChange={this.handleChange}
+                            />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col">
                             <p>Description:</p>
-                            <input name="description" className="form-control placeholder-text" defaultValue={event.description} placeholder="Add a description Here" onChange={this.handleChange} />
+                            <input
+                              name="description"
+                              className="form-control placeholder-text"
+                              defaultValue={event.description}
+                              placeholder="Add a description Here"
+                              onChange={this.handleChange}
+                            />
                           </div>
                           <div className="col" />
                         </div>
                         <div className="row">
                           <div className="col">
                             <p>From:</p>
-                            <DatePicker disabled={loading} onChange={this.startDateChange} defaultValue={moment(event.start, "YYYY MM DD")} />
-                            <TimePicker disabled={loading} use12Hours format="h:mm a" onChange={this.startTimeChange} minuteStep={30} defaultValue={moment(event.start, "hh:mm")} />
+                            <MyDatePicker 
+                              eventDate={this.state.newEvent.start || event.start}
+                              loading={loading}
+                              boundary={"start"}
+                              updatePageDateChange={this.dateChange}
+                            />
+                            <MyTimePicker
+                              loading={loading}
+                              eventTime={this.state.newEvent.start || event.start}
+                              boundary={'start'}
+                              updatePageTimeChange={this.timeChange}
+                            />
                           </div>
                           <div className="col">
                             <p>To:</p>
-                            <DatePicker disabled={loading} onChange={this.endDateChange} defaultValue={moment(event.end, "YYYY MM DD")} />
-                            <TimePicker disabled={loading} use12Hours format="h:mm a" onChange={this.endTimeChange} minuteStep={30} defaultValue={moment(event.end)} />
+                            <MyDatePicker
+                              loading={loading}
+                              eventDate={this.state.newEvent.end || event.end}
+                              boundary={'end'}
+                              updatePageDateChange={this.dateChange}
+                            />
+                            <MyTimePicker
+                              loading={loading}
+                              eventTime={this.state.newEvent.end || event.end}
+                              boundary={'end'}
+                              updatePageTimeChange={this.timeChange} 
+                            />
                           </div>
                         </div>
                         <div className="row user-select">
@@ -204,10 +222,14 @@ class UpdateEvent extends Component {
                             <p>Select Users:</p>
                             <Query query={ALL_USERS_QUERY}>
                               {({ error, loading, data }) => {
-                                if (loading) return <p>
-                                      Loading...
-                                    </p>;
-                                return <MultiSelect allUsers={data.users} eventUsers={event.user} addUsersToState={this.addUsersToState} />;
+                                if (loading) return <p>Loading...</p>;
+                                return (
+                                  <MultiSelect
+                                    allUsers={data.users}
+                                    eventUsers={event.user}
+                                    addUsersToState={this.addUsersToState}
+                                  />
+                                );
                               }}
                             </Query>
                           </div>
@@ -215,7 +237,11 @@ class UpdateEvent extends Component {
                         </div>
                         <div className="row">
                           <div className="col">
-                            <DeleteEvent userId={this.props.userId} history={this.props.history} eventId={event.id}>
+                            <DeleteEvent
+                              userId={this.props.userId}
+                              history={this.props.history}
+                              eventId={event.id}
+                            >
                               Delet{loading ? "ing" : "e"} Event
                             </DeleteEvent>
                           </div>
@@ -227,7 +253,8 @@ class UpdateEvent extends Component {
                         </div>
                       </fieldset>
                     </Event>
-                  </div>;
+                  </div>
+                );
               }}
             </Mutation>
           );

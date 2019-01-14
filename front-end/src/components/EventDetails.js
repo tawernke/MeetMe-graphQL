@@ -4,6 +4,7 @@ import moment from 'moment'
 import MultiSelect from './MultiSelect'
 import { DatePicker, TimePicker } from 'antd'
 import gql from 'graphql-tag'
+import Event from '../styles/Event'
 
 const CREATE_EVENT_MUTATION = gql `
   mutation CREATE_EVENT_MUTATION(
@@ -55,8 +56,8 @@ class EventDetails extends Component {
   componentDidMount() {
     this.setState({
       newEvent: {
-        start: this.props.selectedDateStart,
-        end: this.props.selectedDateStart
+        start: moment(this.props.selectedDateStart).set('hour', moment().get('hour')),
+        end: moment(this.props.selectedDateStart).set('hour', moment().get('hour')),
       }
     });
   }
@@ -86,27 +87,16 @@ class EventDetails extends Component {
   }
 
   timeChange = (time, boundary) => {
-    console.log(time.format())
-    console.log(boundary)
-    //Time isn't being set correctly here
     let newState = this.state.newEvent
-    newState[boundary] = moment(newState[boundary]).set({
-        'hour': moment(time).format("hh"),
-        'minute': moment(time).format("mm")
-      }).format()
+    newState[boundary] = moment(time).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
-      newEvent: newState 
+      newEvent: newState
     })
   }
 
   dateChange = (date, boundary) => {
-    //Date isn't being set correctly here
     let newState = this.state.newEvent
-    newState[boundary] = moment(date).set({
-        year: moment(date).format("YYYY"),
-        month: moment(date).format("MM"),
-        date: moment(date).format("DD")
-      }).format()
+    newState[boundary] = moment(date).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
       newEvent: newState 
     })
@@ -132,12 +122,12 @@ class EventDetails extends Component {
         {(createEvent, { loading, error}) => {
           return(
           <div className="eventDetails">
-            <h1>Event Creation</h1>
-            <form onSubmit={async e => {
+            <Event onSubmit={async e => {
               e.preventDefault()
               const res = await createEvent()
-              this.props.history.push(this.props.match.url.substring(0, 2))
+              this.props.history.push(`/${this.props.userId}`)
             }}>
+              <h2>Create Event</h2>
               <fieldset disabled={loading} aria-busy={loading}>
                 <div className="row">
                   <div className="col">
@@ -180,26 +170,26 @@ class EventDetails extends Component {
                     <p>From:</p>
                     <DatePicker 
                       onChange={this.startDateChange}
-                      defaultValue={moment(selectedDateStart, 'YYYY-MM-DD')}
+                      value={moment(this.state.newEvent.start)}
                       />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.startTimeChange}
                       minuteStep={30}
-                      defaultValue={moment(selectedDateStart, 'HH:mm:ss')}
+                      value={moment(this.state.newEvent.start)}
                       />
                   </div>
                   <div className="col">
                     <p>To:</p>
                     <DatePicker 
                       onChange={this.endDateChange}
-                      defaultValue={moment(selectedDateStart, 'YYYY-MM-DD')}
+                      value={moment(this.state.newEvent.end)}
                     />
                     <TimePicker 
                       use12Hours format="h:mm a" 
                       onChange={this.endTimeChange}
                       minuteStep={30}
-                      defaultValue={moment(selectedDateStart, 'HH:mm:ss')}
+                      value={moment(this.state.newEvent.end)}
                     />
                   </div>
                 </div>
@@ -230,7 +220,7 @@ class EventDetails extends Component {
                   </div>
                 </div>
               </fieldset>
-            </form>
+            </Event>
           </div>
         )}}
       </Mutation>

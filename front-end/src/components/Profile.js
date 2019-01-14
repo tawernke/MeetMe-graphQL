@@ -39,25 +39,6 @@ class Profile extends Component {
     this.props.history.push(`${this.props.match.url}/updateEvent/${calEvent.id}`)
   }
 
-  // timeChange = (time, boundary) => {
-  //   this.setState({
-  //     [boundary]: moment(this.state[boundary]).set({
-  //       'hour': moment(time).format("HH"),
-  //       'minute': moment(time).format("mm")
-  //     })
-  //   })
-  // }
-
-  // dateChange = (date, boundary) => {
-  //   this.setState({
-  //     [boundary]: moment(date).set({
-  //       year: moment(date).format("YYYY"),
-  //       month: moment(date).format("MM"),
-  //       date: moment(date).format("DD")
-  //     })
-  //   })
-  // }
-
   eventDrop = (event) => {
     event.start = event.start
     const shiftedEvent = {
@@ -72,8 +53,8 @@ class Profile extends Component {
 
   dayClick = (date) => {
     this.setState({
-      selectedDateStart: date
-    })
+      selectedDateStart: moment(date).set("hour", moment().get("hour"))
+    });
     this.props.history.push(this.props.match.url + '/newEvent')
   }
 
@@ -96,6 +77,7 @@ class Profile extends Component {
                 path={this.props.match.url + "/newEvent"}
                 render={(routeProps) => <EventDetails
                   {...routeProps}
+                  userId={this.props.match.params.username}
                   selectedDateStart={this.state.selectedDateStart}
                   selectedUsers={this.selectedUsers}
                   timeChange={this.timeChange}
