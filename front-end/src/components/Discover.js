@@ -54,24 +54,24 @@ const YELP_PLACES_QUERY = gql`
 }
 `
 
-const ALL_PLACES_QUERY = gql`
-  query ALL_PLACES_QUERY($id: ID!) {
-    places(userId: $id) {
-      id
-      address
-      city
-      country
-      image
-      name
-      phone
-      rating
-      state
-      type
-      zip
-      price
-    }
-  }
-`;
+// const ALL_PLACES_QUERY = gql`
+//   query ALL_PLACES_QUERY($id: ID!) {
+//     places(userId: $id) {
+//       id
+//       address
+//       city
+//       country
+//       image
+//       name
+//       phone
+//       rating
+//       state
+//       type
+//       zip
+//       price
+//     }
+//   }
+// `;
 
 class Discover extends Component {
   

@@ -3,7 +3,6 @@ import { Query } from "react-apollo";
 import { Menu, Layout } from "antd";
 import { CURRENT_USER_QUERY } from "./User";
 import { Link } from "react-router-dom";
-import User from "./User";
 import Signout from "./Signout";
 import NavBarSearch from './NavBarSearch'
 import "../App.css"

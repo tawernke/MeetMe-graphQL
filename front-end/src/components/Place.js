@@ -58,7 +58,7 @@ class Place extends Component {
         type: placeType,
         ...this.props.place
       }
-      const res = await createPlaceMutation({variables})
+      await createPlaceMutation({variables})
   }
 
   render() {

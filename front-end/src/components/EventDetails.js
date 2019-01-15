@@ -103,7 +103,7 @@ class EventDetails extends Component {
   }
 
   handleChange = e => {
-    const { name, type, value } = e.target
+    const { name, value } = e.target
     let newState = this.state.newEvent
     newState[name] = value
     this.setState({
@@ -112,8 +112,8 @@ class EventDetails extends Component {
   };
   
   render() {
-    const {location, start, end, title, description} = this.state.eventDetails
-    const { deleteEvent, selectedDateStart} = this.props
+    const {location, title, description} = this.state.eventDetails
+    const { deleteEvent } = this.props
     return (
       <Mutation 
         mutation={CREATE_EVENT_MUTATION} 
@@ -124,7 +124,7 @@ class EventDetails extends Component {
           <div className="eventDetails">
             <Event onSubmit={async e => {
               e.preventDefault()
-              const res = await createEvent()
+              await createEvent()
               this.props.history.push(`/${this.props.userId}`)
             }}>
               <h2>Create Event</h2>

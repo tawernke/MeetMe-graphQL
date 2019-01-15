@@ -127,7 +127,7 @@ class Profile extends Component {
                 variables={{ id: this.props.match.params.username }}
               >
                 {({ data, error, loading }) => {
-                  if (loading) return null;
+                  if (loading) return <Spin/>;
                   if (error) return <p>Error: {error.message}</p>;
                   return (
                     <Mutation mutation={UPDATE_EVENT_MUTATION}>

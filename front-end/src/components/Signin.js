@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import { CURRENT_USER_QUERY } from "./User";
 import Form from "../styles/Form";
-import Signout from "./Signout";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {

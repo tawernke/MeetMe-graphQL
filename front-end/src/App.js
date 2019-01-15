@@ -5,7 +5,7 @@ import Signin from "./components/Signin";
 import Profile from "./components/Profile";
 import Discover from "./components/Discover";
 import Signup from "./components/Signup";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import PleaseSignIn from "./components/PleaseSignIn";
 import Navbar from "./components/Navbar";
 import RequestReset from "./components/RequestReset";

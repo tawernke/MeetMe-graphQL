@@ -83,7 +83,7 @@ class UpdateEvent extends Component {
   };
 
   handleChange = e => {
-    const { name, type, value } = e.target;
+    const { name, value } = e.target;
     let newState = this.state.newEvent;
     newState[name] = value;
     this.setState({
