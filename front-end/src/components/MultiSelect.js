@@ -19,6 +19,7 @@ class MultiSelect extends Component {
     return(
       <div className="multi-select-div">
         <Select
+          name="user"
           mode="multiple"
           defaultValue={users}
           style={{ width: '100%', height: '50px' }}

@@ -6,16 +6,9 @@ import "antd/dist/antd.css";
 import gql from "graphql-tag";
 import DeleteEvent from "./DeleteEvent";
 import { ALL_USERS_QUERY } from "./EventDetails";
-import ALL_USER_EVENTS_QUERY from "./Profile";
 import Event from "../styles/Event";
 import MyDatePicker from './MyDatePicker'
 import MyTimePicker from './MyTimePicker'
-
-const LOCAL_STATE_QUERY = gql`
-  query {
-    eventTimes @client
-  }
-`
 
 const SINGLE_EVENT_QUERY = gql`
   query SINGLE_EVENT_QUERY($id: ID!) {
@@ -265,3 +258,4 @@ class UpdateEvent extends Component {
 }
 
 export default UpdateEvent;
+export { UPDATE_EVENT_MUTATION };

@@ -57,7 +57,7 @@ class EventDetails extends Component {
     this.setState({
       newEvent: {
         start: moment(this.props.selectedDateStart).set('hour', moment().get('hour')),
-        end: moment(this.props.selectedDateStart).set('hour', moment().get('hour')),
+        end: moment(this.props.selectedDateEnd).set('hour', moment().get('hour')),
       }
     });
   }
