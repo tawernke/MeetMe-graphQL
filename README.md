@@ -6,11 +6,11 @@ The calendar features of the app are fully functional, but using the Yelp GraphQ
 
 ## Built With
 
-* React
-* Node
-* Apollo Client
-* GraphQL Yoga
-* Prisma
+* [React](https://reactjs.org/)
+* [Node](https://nodejs.org/en/)
+* [Apollo Client](https://www.apollographql.com/docs/react/)
+* [GraphQL Yoga](https://github.com/prisma/graphql-yoga)
+* [Prisma](https://www.prisma.io/)
 * [Yelp GraphQL API](https://www.yelp.com/developers/graphql/guides/intro)
 * [FullCallendar](https://fullcalendar.io/) - A javascript callendar
 * [Ant Design](https://ant.design/) - React UI component library
