@@ -18,16 +18,28 @@ const httpLink = createHttpLink({
   }
 });
 
+// const authLink = setContext((_, { headers }) => {
+//   const token = "qHwBybthx8SOAu_231Jff9xKWrt9cq3p2lc1oytmPLmQSdyizg4mVm2wWVTgx9yjkvH-nJrNLdpnhoQRs0fhSWgZ8Ef1aQCAzPf15zPn6WC2nxLiDmpGiwOmGGm-WnYx";
+//   // return the headers to the context so httpLink can read them
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: `Bearer ${token}`,
+//       'Content-Type': 'application/graphql',
+//     }
+//   }
+// });
+
 const authLink = setContext((_, { headers }) => {
-  const token = "G3wgONB3yQZcQIhCsnr7kB99qo0uUKz1PeAzHbeWv2_AGYfNMNyfrGAVwJe_ZmNwLS9_HO5O26tSQ7b8Yur4lCJeqFR5Wwiv81x_h-cnuynrWY6npJFNzK3imRQSXHYx";
+  // get the authentication token from local storage if it exists
+  const token = "qHwBybthx8SOAu_231Jff9xKWrt9cq3p2lc1oytmPLmQSdyizg4mVm2wWVTgx9yjkvH-nJrNLdpnhoQRs0fhSWgZ8Ef1aQCAzPf15zPn6WC2nxLiDmpGiwOmGGm-WnYx";
   // return the headers to the context so httpLink can read them
   return {
     headers: {
-      ...headers,
-      authorization: `Bearer ${token}`,
-      'Content-Type': 'application/graphql',
+      // ...headers,
+      authorization: token ? `Bearer ${token}` : ""
     }
-  }
+  };
 });
 
 const yelpClient = new ApolloClient({
