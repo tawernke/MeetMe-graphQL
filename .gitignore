@@ -56,9 +56,14 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+# .env
 
 # next.js build output
 .next
 
 .DS_STORE
+
+src/*
+public/*
+build/static/css/*.map
+build/static/js/*.map
