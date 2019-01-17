@@ -10,6 +10,7 @@ import {Redirect} from 'react-router-dom'
 import Place from './Place'
 import {Spin} from 'antd'
 
+//This page is in progress to create a new apollo client that reaches the YELP GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: "https://api.yelp.com/v3/graphql",
   fetchOptions: {
@@ -18,14 +19,13 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = "G3wgONB3yQZcQIhCsnr7kB99qo0uUKz1PeAzHbeWv2_AGYfNMNyfrGAVwJe_ZmNwLS9_HO5O26tSQ7b8Yur4lCJeqFR5Wwiv81x_h-cnuynrWY6npJFNzK3imRQSXHYx";
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
       authorization: `Bearer ${token}`,
-      // 'Content-Type': 'application/graphql',
+      'Content-Type': 'application/graphql',
     }
   }
 });

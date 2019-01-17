@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
-import MultiSelect from "./MultiSelect";
+import MultiSelectUsers from "./MultiSelectUsers";
 import "antd/dist/antd.css";
 import gql from "graphql-tag";
 import DeleteEvent from "./DeleteEvent";
 import { ALL_USERS_QUERY } from "./EventDetails";
 import Event from "../styles/Event";
-import MyDatePicker from './MyDatePicker'
-import MyTimePicker from './MyTimePicker'
+import MyDatePicker from "./MyDatePicker";
+import MyTimePicker from "./MyTimePicker";
 
 const SINGLE_EVENT_QUERY = gql`
   query SINGLE_EVENT_QUERY($id: ID!) {
@@ -62,40 +62,39 @@ const UPDATE_EVENT_MUTATION = gql`
 
 class UpdateEvent extends Component {
   state = {
-    newEvent: {
-    }
+    updatedEvent: {}
   };
 
   timeChange = (time, boundary) => {
-    let newState = this.state.newEvent;
+    let newState = this.state.updatedEvent;
     newState[boundary] = moment(time).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
-      newEvent: newState
+      updatedEvent: newState
     });
   };
 
   dateChange = (date, boundary) => {
-    let newState = this.state.newEvent;
+    let newState = this.state.updatedEvent;
     newState[boundary] = moment(date).format("YYYY-MM-DDTHH:mm:ss");
     this.setState({
-      newEvent: newState
+      updatedEvent: newState
     });
   };
 
   handleChange = e => {
     const { name, value } = e.target;
-    let newState = this.state.newEvent;
+    let newState = this.state.updatedEvent;
     newState[name] = value;
     this.setState({
-      newEvent: newState
+      updatedEvent: newState
     });
   };
 
   addUsersToState = (userId, allUsers) => {
-    const newState = { ...this.state.newEvent };
+    const newState = { ...this.state.updatedEvent };
     newState.user = allUsers.map(user => user.key);
     this.setState({
-      newEvent: newState
+      updatedEvent: newState
     });
   };
 
@@ -104,24 +103,10 @@ class UpdateEvent extends Component {
     await updateEventMutation({
       variables: {
         id: this.props.match.params.eventId,
-        ...this.state.newEvent
+        ...this.state.updatedEvent
       }
-      // refetchQueries: [
-      //   {
-      //     query: ALL_USER_EVENTS_QUERY,
-      //     variables: {
-      //       id: this.props.userURL,
-      //       awaitRefetchQueries: true
-      //     }
-      //   }
-      // ]
     }).then(() => this.props.history.push(`/${this.props.userId}`));
   };
-
-  // update = (cache, payload) => {
-  //   console.log(payload)
-  //   const data = cache.readQuery({ query: ALL_USER_EVENTS_QUERY, variables: { id: this.props.userURL}})
-  // }
 
   render() {
     return (
@@ -181,16 +166,20 @@ class UpdateEvent extends Component {
                         <div className="row">
                           <div className="col">
                             <p>From:</p>
-                            <MyDatePicker 
-                              eventDate={this.state.newEvent.start || event.start}
+                            <MyDatePicker
+                              eventDate={
+                                this.state.updatedEvent.start || event.start
+                              }
                               loading={loading}
                               boundary={"start"}
                               updatePageDateChange={this.dateChange}
                             />
                             <MyTimePicker
                               loading={loading}
-                              eventTime={this.state.newEvent.start || event.start}
-                              boundary={'start'}
+                              eventTime={
+                                this.state.updatedEvent.start || event.start
+                              }
+                              boundary={"start"}
                               updatePageTimeChange={this.timeChange}
                             />
                           </div>
@@ -198,15 +187,19 @@ class UpdateEvent extends Component {
                             <p>To:</p>
                             <MyDatePicker
                               loading={loading}
-                              eventDate={this.state.newEvent.end || event.end}
-                              boundary={'end'}
+                              eventDate={
+                                this.state.updatedEvent.end || event.end
+                              }
+                              boundary={"end"}
                               updatePageDateChange={this.dateChange}
                             />
                             <MyTimePicker
                               loading={loading}
-                              eventTime={this.state.newEvent.end || event.end}
-                              boundary={'end'}
-                              updatePageTimeChange={this.timeChange} 
+                              eventTime={
+                                this.state.updatedEvent.end || event.end
+                              }
+                              boundary={"end"}
+                              updatePageTimeChange={this.timeChange}
                             />
                           </div>
                         </div>
@@ -217,7 +210,7 @@ class UpdateEvent extends Component {
                               {({ error, loading, data }) => {
                                 if (loading) return <p>Loading...</p>;
                                 return (
-                                  <MultiSelect
+                                  <MultiSelectUsers
                                     allUsers={data.users}
                                     eventUsers={event.user}
                                     addUsersToState={this.addUsersToState}

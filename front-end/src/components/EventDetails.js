@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { Mutation, Query } from 'react-apollo'
 import moment from 'moment'
-import MultiSelect from './MultiSelect'
+import MultiSelectUsers from './MultiSelectUsers'
 import { DatePicker, TimePicker } from 'antd'
 import gql from 'graphql-tag'
 import Event from '../styles/Event'
@@ -102,6 +102,7 @@ class EventDetails extends Component {
     })
   }
 
+  //Function that  adds all inputs (besides date and time) to state as they're entered
   handleChange = e => {
     const { name, value } = e.target
     let newState = this.state.newEvent
@@ -200,7 +201,7 @@ class EventDetails extends Component {
                       {({error, loading, data}) => {
                         if(loading) return <p>Loading...</p>
                         return (
-                        <MultiSelect 
+                        <MultiSelectUsers 
                           allUsers={data.users}
                           addUsersToState={this.addUsersToState}
                           />

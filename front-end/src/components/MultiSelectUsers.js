@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 
 const Option = Select.Option;
 
-class MultiSelect extends Component {
+class MultiSelectUsers extends Component {
   
   render() {
     const allUsersJSX = this.props.allUsers.map(user => {
@@ -33,4 +33,4 @@ class MultiSelect extends Component {
   }
 }
 
-export default MultiSelect
+export default MultiSelectUsers
