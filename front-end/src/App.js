@@ -35,7 +35,6 @@ class App extends Component {
     return (
       <div>
         <Navbar history={this.props.history} />
-        <div className="app">
           <Switch>
             <Route
               exact
@@ -79,7 +78,6 @@ class App extends Component {
             </PleaseSignIn>
           </Switch>
         </div>
-      </div>
     );
   }
 }
