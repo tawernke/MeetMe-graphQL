@@ -24,7 +24,7 @@ server.express.use((req, res, next) => {
 server.start({
   cors: {
     credentials: true,
-    origin: "https://meet-me-frontend-prod.herokuapp.com/",
+    origin: "https://meet-me-frontend-prod.herokuapp.com",
   },
 }, deets => {
   console.log(`Server is now running on port http://localhost:${deets.port}`)
