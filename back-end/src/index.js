@@ -22,10 +22,10 @@ server.express.use((req, res, next) => {
 //TODo Use express middleware to populate current user
 
 server.start({
-  // cors: {
-  //   credentials: true,
-  //   origin: process.env.FRONTEND_URL,
-  // },
+  cors: {
+    credentials: true,
+    origin: "https://meet-me-frontend-prod.herokuapp.com/",
+  },
 }, deets => {
   console.log(`Server is now running on port http://localhost:${deets.port}`)
 })
