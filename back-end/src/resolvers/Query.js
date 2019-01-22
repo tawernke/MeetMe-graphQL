@@ -1,75 +1,81 @@
 const { forwardTo} = require('prisma-binding')
+const { Yelp } = require("graphql-binding-yelp");
 //If a query is exactly the same on Yoga as it is on prisma, you can forward the query from yoga to prisma
 
+const apiKey = process.env.YELP_API_KEY;
+const yelp = new Yelp(apiKey)
+
 const Query = {
-  users: forwardTo('db'),
-  // events: forwardTo('db'), //This pulls the function from the prisma.graphql file pulled from the PRISMA server
-  
-  async events(parent, {userId}, ctx, info) {
+  async favoriteBusinesses(parent, args, context, info) {
+    console.log(args);
+    const res = await yelp.delegate("query", "search", args, context, info);
+    return res;
+  },
+  users: forwardTo("db"),
+
+  async events(parent, { userId }, ctx, info) {
     const events = await ctx.db.query.events(
       {
-        where: { 
-          user_some: { id_contains: userId},
-        },
+        where: {
+          user_some: { id_contains: userId }
+        }
       },
       info
-    )
-    return events
+    );
+    return events;
   },
-  
-  event: forwardTo('db'),
-  
+
+  event: forwardTo("db"),
+
   async user(parent, { id }, ctx, info) {
     const places = await ctx.db.query.places(
       {
         where: {
           id: id
-        },
+        }
       },
       info
-    )
-    return user
+    );
+    return user;
   },
   // places: forwardTo('db'),
-  async places(parent, {userId, type}, ctx, info) {
+  async places(parent, { userId, type }, ctx, info) {
     const places = await ctx.db.query.places(
       {
-        where: { 
-          user: { id: userId},
+        where: {
+          user: { id: userId },
           type: type
-        },
+        }
       },
       info
-    )
-    return places
+    );
+    return places;
   },
-  
-  preferences: forwardTo('db'),
-  
+
+  // preferences: forwardTo('db'),
+
   me(parent, args, ctx, info) {
     //check if there is a current user ID
     if (!ctx.request.userId) {
-      return null
+      return null;
     }
     return ctx.db.query.user(
       {
-        where: { id: ctx.request.userId },
+        where: { id: ctx.request.userId }
       },
       info
-    )
+    );
   },
 
-  async user(parent, {id}, ctx, info) {
-    const user = await ctx.db.query.user(
-      {
-        where: {
-          id: id
-        },
-        info
-      }
-    )
-    return user
-  },
-}
+  async user(parent, { id }, ctx, info) {
+    const user = await ctx.db.query.user({
+      where: {
+        id: id
+      },
+      info
+    });
+    return user;
+  }
+};
 
 module.exports = Query;

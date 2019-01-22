@@ -8,7 +8,7 @@ import registerServiceWorker from './registerServiceWorker'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 const client = new ApolloClient({
-    uri: `https://meet-me-yoga-prod.herokuapp.com/`,
+    uri: `http://localhost:4444`,
     request: operation => {
       operation.setContext({
         fetchOptions: {

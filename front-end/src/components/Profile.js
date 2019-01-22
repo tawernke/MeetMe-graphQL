@@ -25,10 +25,10 @@ const ALL_USER_EVENTS_QUERY = gql`
         name
       }
     }
-    preferences {
-      id
-      name
-    }
+    # preferences {
+    #   id
+    #   name
+    # }
   }
 `;
 

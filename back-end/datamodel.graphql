@@ -20,7 +20,7 @@ type User {
   image: String
   events: [Event]
   places: [Place]
-  preferences: [Preference]
+  # preferences: [Preference]
 }
 
 type Event {
@@ -50,13 +50,5 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   price: String
-  user: User!
-}
-
-type Preference {
-  id: ID! @unique
-  name: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
   user: User!
 }

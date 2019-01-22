@@ -1,5 +1,5 @@
 #import * from './generated/prisma.graphql'
-#The above comment helps return the Event, without having to define it here
+#import * from "./yelp.graphql"
 
 type SuccessMessage {
   message: String
@@ -30,19 +30,13 @@ type Mutation {
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 }
 
-type Mutation {
-  createPreference(
-    name: String
-  ): Preference!
-}
-
 type Query {
+  favoriteBusinesses(term: String, latitude: Float, longitude: Float): Businesses!
   events(userId: ID): [Event]
   event(where: EventWhereUniqueInput!): Event
   # places(where: String): [Place]!
   places(userId: ID, type: String): [Place]!
   # places(userId: ID!): [Place]!
-  preferences: [Preference]!
   user(id: ID!): User!
   users: [User]
   me: User

@@ -1,11 +1,17 @@
 const cookieParser = require("cookie-parser");
 const jwt = require('jsonwebtoken')
 require('dotenv').config({path: 'variables.env' })
-const createServer = require('./createServer')
-const db = require('./db')
+const createServer = require("./createServer");
 
 //Start a version of the server from the createServer function
 const server = createServer()
+
+// const resolvers = {
+//   Query: {
+    
+//   },
+//   ...yelp.remoteResolvers(typeDefs)
+// };
 
 server.express.use(cookieParser());
 

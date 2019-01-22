@@ -126,17 +126,17 @@ const Mutations = {
     return place;
   },
 
-  async createPreference(parent, args, ctx, info) {
-    const preference = await ctx.db.mutation.createpreference(
-      {
-        data: {
-          ...args
-        }
-      },
-      info
-    );
-    return preference;
-  },
+  // async createPreference(parent, args, ctx, info) {
+  //   const preference = await ctx.db.mutation.createpreference(
+  //     {
+  //       data: {
+  //         ...args
+  //       }
+  //     },
+  //     info
+  //   );
+  //   return preference;
+  // },
   async signup(parent, args, ctx, info) {
     //lowercase the email
     args.email = args.email.toLowerCase();

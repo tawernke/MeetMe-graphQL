@@ -5,7 +5,8 @@ import moment from "moment";
 class MyDatePicker extends Component {
 
   dateChange = newDateMoment => {
-    this.props.updatePageDateChange(newDateMoment, this.props.boundary === "start" ? "start" : "end");
+    const { updatePageDateChange, boundary } = this.props
+    updatePageDateChange(newDateMoment, boundary);
   }
 
   render() {

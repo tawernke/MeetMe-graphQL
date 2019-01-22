@@ -27,6 +27,7 @@ const SINGLE_EVENT_QUERY = gql`
   }
 `;
 
+
 const UPDATE_EVENT_MUTATION = gql`
   mutation UPDATE_EVENT_MUTATION(
     $id: ID!
@@ -90,7 +91,7 @@ class UpdateEvent extends Component {
     });
   };
 
-  addUsersToState = (userId, allUsers) => {
+  addUsersToState = (_, allUsers) => {
     const newState = { ...this.state.updatedEvent };
     newState.user = allUsers.map(user => user.key);
     this.setState({

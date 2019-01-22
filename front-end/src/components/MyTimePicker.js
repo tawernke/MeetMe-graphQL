@@ -5,7 +5,8 @@ import moment from "moment";
 class MyTimePicker extends Component {
 
   timeChange = newTimeMoment => {
-    this.props.updatePageTimeChange(newTimeMoment, this.props.boundary === "start" ? "start" : "end");
+    const { updatePageTimeChange, boundary } = this.props;
+    updatePageTimeChange(newTimeMoment, boundary);
   }
 
   render() {
