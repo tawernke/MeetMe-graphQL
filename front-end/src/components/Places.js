@@ -27,7 +27,6 @@ const Places = props => {
     <Query query={ALL_PLACES_QUERY}>
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>;
-        console.log(data);
         const yelpPlaces = props.places.map(place => {
           let isToDoSaved = false;
           let isFavourited = false;
