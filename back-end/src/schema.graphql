@@ -15,10 +15,10 @@ type Mutation {
   signout: SuccessMessage
   createPlace(
     name: String
-    address: String
+    address1: String
     city: String
     state: String
-    zip: String
+    postal_code: String
     country: String
     type: String
     rating: Float
@@ -34,9 +34,7 @@ type Query {
   favoriteBusinesses(term: String, latitude: Float, longitude: Float): Businesses!
   events(userId: ID): [Event]
   event(where: EventWhereUniqueInput!): Event
-  # places(where: String): [Place]!
   places(userId: ID, type: String): [Place]!
-  # places(userId: ID!): [Place]!
   user(id: ID!): User!
   users: [User]
   me: User

@@ -12,7 +12,11 @@ const YELP_PLACES_QUERY = gql`
         phone
         price
         location {
-          formatted_address
+          address1
+          city
+          state
+          postal_code
+          country
         }
         photos
         rating
@@ -20,26 +24,6 @@ const YELP_PLACES_QUERY = gql`
     }
   }
 `;
-
-
-// const ALL_PLACES_QUERY = gql`
-//   query ALL_PLACES_QUERY($id: ID!) {
-//     places(userId: $id) {
-//       id
-//       address
-//       city
-//       country
-//       image
-//       name
-//       phone
-//       rating
-//       state
-//       type
-//       zip
-//       price
-//     }
-//   }
-// `;
 
 class Discover extends Component {
   state = {

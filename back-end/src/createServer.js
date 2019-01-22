@@ -51,11 +51,11 @@ function createServer() {
           return user;
         },
         // places: forwardTo('db'),
-        async places(parent, { userId, type }, ctx, info) {
+        async places(parent, { type }, ctx, info) {
           const places = await ctx.db.query.places(
             {
               where: {
-                user: { id: userId },
+                user: { id: ctx.request.userId },
                 type: type
               }
             },

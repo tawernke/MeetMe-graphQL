@@ -6,7 +6,7 @@ const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY($id: ID! $type: String!) {
     places(userId: $id type: $type) {
       id
-      address
+      address1
       city
       country
       image
@@ -15,7 +15,7 @@ const ALL_PLACES_QUERY = gql`
       rating
       state
       type
-      zip
+      postal_code
       price
     }
   }

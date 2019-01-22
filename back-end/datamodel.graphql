@@ -38,10 +38,10 @@ type Event {
 type Place {
   id: ID! @unique
   name: String
-  address: String
+  address1: String
   city: String
   state: String
-  zip: String
+  postal_code: String
   country: String
   type: String
   rating: Float

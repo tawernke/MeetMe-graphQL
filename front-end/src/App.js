@@ -16,7 +16,7 @@ const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY {
     places {
       id
-      address
+      address1
       city
       country
       name
@@ -25,7 +25,7 @@ const ALL_PLACES_QUERY = gql`
       rating
       state
       type
-      zip
+      postal_code
     }
   }
 `;

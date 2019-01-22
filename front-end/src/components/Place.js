@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import { Icon } from "antd";
 import gql from "graphql-tag";
+import { ALL_PLACES_QUERY } from './Places'
 
 const CREATE_PLACE_MUTATION = gql`
   mutation CREATE_PLACE_MUTATION(
-    $address: String
+    $address1: String
     $city: String
     $country: String
     $image: String
@@ -14,11 +15,11 @@ const CREATE_PLACE_MUTATION = gql`
     $rating: Float
     $state: String
     $type: String
-    $zip: String
+    $postal_code: String
     $price: String
   ) {
     createPlace(
-      address: $address
+      address1: $address1
       city: $city
       country: $country
       image: $image
@@ -27,11 +28,11 @@ const CREATE_PLACE_MUTATION = gql`
       rating: $rating
       state: $state
       type: $type
-      zip: $zip
+      postal_code: $postal_code
       price: $price
     ) {
       id
-      address
+      address1
       city
       country
       image
@@ -40,7 +41,7 @@ const CREATE_PLACE_MUTATION = gql`
       rating
       state
       type
-      zip
+      postal_code
       price
       user {
         id
@@ -52,66 +53,32 @@ const CREATE_PLACE_MUTATION = gql`
 
 class Place extends Component {
   createPlace = async (e, createPlaceMutation, placeType) => {
-    const variables = {
-      type: placeType,
-      ...this.props.place
-    };
-    const newPlace = await createPlaceMutation({ variables });
-    console.log(newPlace);
+    await createPlaceMutation({
+      variables: {
+        type: placeType,
+        ...this.props.place
+      },
+    });
   };
 
   render() {
-    const { photos, name, location, phone, rating, price } = this.props.place
-    return (
-      <Mutation mutation={CREATE_PLACE_MUTATION} variables={this.props.place}>
-        {(createPlace, { loading, error }) => (
-          <div className="justify-content-center col-xl-3 col-lg-4 col-sm-6 col-xs-12 discover-card">
+    const { image, name, address1, phone, rating, price } = this.props.place
+    return <Mutation mutation={CREATE_PLACE_MUTATION} refetchQueries={[{ query: ALL_PLACES_QUERY }]}>
+        {(createPlace, { loading, error }) => <div className="justify-content-center col-xl-3 col-lg-4 col-sm-6 col-xs-12 discover-card">
             <div className="card">
-              <img className="card-img-top" src={photos[0]} alt="" />
+              <img className="card-img-top" src={image} alt="" />
               <div className="card-body">
                 <h5 className="card-title">{name}</h5>
-                <p className="card-text">{location.formatted_address} </p>
+                <p className="card-text">{address1}</p>
                 <p className="card-text">{phone} </p>
                 <p className="card-text">Rating: {rating} </p>
                 <p className="card-text">Price: {price} </p>
-                <Icon
-                  className="saveIcon"
-                  type="star"
-                  theme="filled"
-                  style={{ fontSize: 25, color: "#FDBE34" }}
-                  onClick={() =>
-                    this.props.deletePlace(this.props.isToDoSaved[0].id)
-                  }
-                />
-                <Icon
-                  className="saveIcon"
-                  type="star"
-                  theme="outlined"
-                  style={{ fontSize: 25, color: "#FDBE34" }}
-                  onClick={e => this.createPlace(e, createPlace, "todo")}
-                />
-                <Icon
-                  className="saveIcon"
-                  type="heart"
-                  theme="filled"
-                  style={{ fontSize: 25, color: "red" }}
-                  onClick={() =>
-                    this.props.deletePlace(this.props.isFavouriteSaved[0].id)
-                  }
-                />
-                <Icon
-                  className="saveIcon"
-                  type="heart"
-                  theme="outlined"
-                  style={{ fontSize: 25, color: "red" }}
-                  onClick={e => this.createPlace(e, createPlace, "favourite")}
-                />
+                {this.props.isToDoSaved ? <Icon className="saveIcon" type="star" theme="filled" style={{ fontSize: 25, color: "#FDBE34" }} onClick={() => this.props.deletePlace(this.props.isToDoSaved[0].id)} /> : <Icon className="saveIcon" type="star" theme="outlined" style={{ fontSize: 25, color: "#FDBE34" }} onClick={e => this.createPlace(e, createPlace, "todo")} />}
+                {this.props.isFavourited ? <Icon className="saveIcon" type="heart" theme="filled" style={{ fontSize: 25, color: "red" }} onClick={() => this.props.deletePlace(this.props.isFavouriteSaved[0].id)} /> : <Icon className="saveIcon" type="heart" theme="outlined" style={{ fontSize: 25, color: "red" }} onClick={e => this.createPlace(e, createPlace, "favourite")} />}
               </div>
             </div>
-          </div>
-        )}
-      </Mutation>
-    );
+          </div>}
+      </Mutation>;
   }
 }
 
