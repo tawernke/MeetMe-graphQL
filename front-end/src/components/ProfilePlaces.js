@@ -27,10 +27,12 @@ class Places extends Component {
       <Query 
         query={ALL_PLACES_QUERY} 
         variables={{id: this.props.match.params.username, type: this.props.type}}
+        // fetchPolicy={"network-only"}
       >
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>
           if (error) return <p>Error: {error.message}</p>
+          console.log(data)
           return <div>
               <ul className="your-places-list">
                 {data.places.map(place => (
