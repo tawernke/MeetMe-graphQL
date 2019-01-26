@@ -75,7 +75,6 @@ class Place extends Component {
   };
 
   deletePlace = async(placeId, deletePlaceMutation) => {
-    console.log(placeId)
     await deletePlaceMutation({
       variables: {id: placeId},
       refetchQueries: [{
