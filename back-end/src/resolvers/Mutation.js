@@ -138,6 +138,10 @@ const Mutations = {
   //   return preference;
   // },
   async signup(parent, args, ctx, info) {
+    //check to see an email, name, and password have been entered
+    if(!args.email || !args.name || !args.password) {
+      throw new Error('Please fill in all the fields')
+    }
     //lowercase the email
     args.email = args.email.toLowerCase();
     //hash the password

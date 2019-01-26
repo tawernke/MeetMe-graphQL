@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import { CURRENT_USER_QUERY } from "./User";
 import Form from "../styles/Form";
+import Error from "./ErrorMessage";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -51,7 +52,7 @@ class Signin extends Component {
               >
                 <fieldset disabled={loading} aria-busy={loading}>
                   <h2>Sign in to your account</h2>
-                  <p>{error}</p>
+                  <Error error={error} />
                   <input
                     name="email"
                     value={this.state.email}

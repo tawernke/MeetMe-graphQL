@@ -58,12 +58,15 @@ class Place extends Component {
         type: placeType,
         ...this.props.place
       },
+      refetchQueries:[{ 
+        query: ALL_PLACES_QUERY,
+      }],
     });
   };
 
   render() {
     const { image, name, address1, phone, rating, price } = this.props.place
-    return <Mutation mutation={CREATE_PLACE_MUTATION} refetchQueries={[{ query: ALL_PLACES_QUERY }]}>
+    return <Mutation mutation={CREATE_PLACE_MUTATION}>
         {(createPlace, { loading, error }) => <div className="justify-content-center col-xl-3 col-lg-4 col-sm-6 col-xs-12 discover-card">
             <div className="card">
               <img className="card-img-top" src={image} alt="" />

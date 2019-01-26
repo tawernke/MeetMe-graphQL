@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY } from "./User";
+import Form from "../styles/Form";
+import Error from "./ErrorMessage";
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -47,10 +49,10 @@ class Signup extends Component {
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
         {(signup, { error, loading }) => (
-            <form method="post" onSubmit={e => this.signUp(e, signup)}>
+            <Form method="post" onSubmit={e => this.signUp(e, signup)}>
               <fieldset disabled={loading} aria-busy={loading}>
                 <h2>Sign up for an account</h2>
-                <p>{error}</p>
+                <Error error={error} />
                 <input name="email" className="form-control" placeholder="email" onChange={this.saveToState} />
                 <input name="name" className="form-control" placeholder="name" onChange={this.saveToState} />
                 <input name="password" className="form-control" placeholder="password" type="password" onChange={this.saveToState} />
@@ -58,7 +60,7 @@ class Signup extends Component {
                   Signup
                 </button>
               </fieldset>
-            </form>
+            </Form>
           )}
       </Mutation>
     );

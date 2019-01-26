@@ -27,7 +27,6 @@ class Places extends Component {
       <Query 
         query={ALL_PLACES_QUERY} 
         variables={{id: this.props.match.params.username, type: this.props.type}}
-        // fetchPolicy={"network-only"}
       >
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>
