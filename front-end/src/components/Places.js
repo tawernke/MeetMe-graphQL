@@ -28,22 +28,29 @@ const Places = props => {
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>;
         const yelpPlaces = props.places.map(place => {
-          let isToDoSaved = false;
-          let isFavourited = false;
-          if (data) {
-            isToDoSaved = data.places.some(toDo => {
-              return place.name === toDo.name && toDo.type === "todo";
-            });
-            isFavourited = data.places.some(savedPlace => {
-              return (
-                place.name === savedPlace.name &&
-                savedPlace.type === "favourite"
-              );
-            });
-          }
+          if (!data) return null;
+          let newPlace = {
+            isFavourited: false,
+            isToDoSaved: false
+          };
+          data.places.forEach(savedPlace => {
+            if (
+              place.name === savedPlace.name &&
+              savedPlace.type === "favourite"
+            ) {
+              newPlace.isFavourited = true;
+              newPlace.Id = savedPlace.id;
+            }
+            if (place.name === savedPlace.name && savedPlace.type === "todo") {
+              newPlace.isToDoSaved = true;
+              newPlace.Id = savedPlace.id;
+            }
+          });
           return (
             <Place
+              key={newPlace.Id}
               place={{
+                id: newPlace.Id,
                 address1: place.location.address1,
                 city: place.location.city,
                 country: place.location.country,
@@ -55,8 +62,8 @@ const Places = props => {
                 postal_code: place.location.postal_code,
                 price: place.price
               }}
-              isToDoSaved={isToDoSaved}
-              isFavourited={isFavourited}
+              isToDoSaved={newPlace.isToDoSaved}
+              isFavourited={newPlace.isFavourited}
             />
           );
         });

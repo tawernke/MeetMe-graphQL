@@ -31,7 +31,6 @@ class Places extends Component {
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>
           if (error) return <p>Error: {error.message}</p>
-          console.log(data)
           return <div>
               <ul className="your-places-list">
                 {data.places.map(place => (

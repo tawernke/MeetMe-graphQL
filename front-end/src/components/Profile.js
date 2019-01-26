@@ -122,7 +122,6 @@ class Profile extends Component {
             path={this.props.match.url}
             render={() => (
               <Query
-                fetchPolicy={"network-only"}
                 query={ALL_USER_EVENTS_QUERY}
                 variables={{ id: this.props.match.params.username }}
               >

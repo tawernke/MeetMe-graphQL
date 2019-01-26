@@ -26,6 +26,7 @@ type Mutation {
     phone: String
     price: String
   ): Place!
+  deletePlace(id: ID): Place
   requestReset(email: String!): SuccessMessage
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 }

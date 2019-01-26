@@ -5,6 +5,7 @@ import MultiSelectUsers from './MultiSelectUsers'
 import { DatePicker, TimePicker } from 'antd'
 import gql from 'graphql-tag'
 import Event from '../styles/Event'
+import { ALL_USER_EVENTS_QUERY } from "./Profile";
 
 const CREATE_EVENT_MUTATION = gql `
   mutation CREATE_EVENT_MUTATION(
@@ -119,14 +120,19 @@ class EventDetails extends Component {
       <Mutation 
         mutation={CREATE_EVENT_MUTATION} 
         variables={this.state.newEvent}
+        refetchQueries={[{
+          query: ALL_USER_EVENTS_QUERY,
+          variables: {
+            id: this.props.userId
+          }
+        }]}
         >
         {(createEvent, { loading, error}) => {
           return(
           <div className="eventDetails">
             <Event onSubmit={async e => {
               e.preventDefault()
-              await createEvent()
-              this.props.history.push(`/${this.props.userId}`)
+                await createEvent().then(() => this.props.history.push(`/${this.props.userId}`))
             }}>
               <h2>Create Event</h2>
               <fieldset disabled={loading} aria-busy={loading}>

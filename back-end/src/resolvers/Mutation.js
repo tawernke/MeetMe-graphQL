@@ -36,13 +36,15 @@ const Mutations = {
   },
 
   async updateEvent(parent, args, ctx, info) {
-    const newUserIds = args.user ? args.user.map(user => {
-      return { id: user };
-    }): null
+    const newUserIds = args.user
+      ? args.user.map(user => {
+          return { id: user };
+        })
+      : null;
     delete args.user;
     const updates = { ...args };
     const oldEventDetails = await ctx.db.query.event(
-      {where: {id: updates.id}},
+      { where: { id: updates.id } },
       `{
         id,
         user {
@@ -56,9 +58,9 @@ const Mutations = {
         data: {
           user: {
             disconnect: oldEventDetails.user.map(user => {
-              return { id: user.id }
-            }),
-          },
+              return { id: user.id };
+            })
+          }
         },
         where: {
           id: args.id
@@ -66,7 +68,7 @@ const Mutations = {
       },
       info
     );
-    const updatedEvent =  await ctx.db.mutation.updateEvent(
+    const updatedEvent = await ctx.db.mutation.updateEvent(
       {
         data: {
           user: {
@@ -77,9 +79,10 @@ const Mutations = {
         where: {
           id: args.id
         }
-      }, info
-    )
-    return updatedEvent
+      },
+      info
+    );
+    return updatedEvent;
   },
 
   updateUser(parent, args, ctx, info) {
@@ -126,6 +129,16 @@ const Mutations = {
     return place;
   },
 
+  async deletePlace(parent, args, ctx, info) {
+    const id = { ...args };
+    //1. find the event
+    const place = await ctx.db.query.place({ where }, `{id}`);
+    //2. Check if they own that item, or they have permissions
+    //TODO
+    //3. Delete it
+    return ctx.db.mutation.deletePlace({ where: id }, info);
+  },
+
   // async createPreference(parent, args, ctx, info) {
   //   const preference = await ctx.db.mutation.createpreference(
   //     {
@@ -139,8 +152,8 @@ const Mutations = {
   // },
   async signup(parent, args, ctx, info) {
     //check to see an email, name, and password have been entered
-    if(!args.email || !args.name || !args.password) {
-      throw new Error('Please fill in all the fields')
+    if (!args.email || !args.name || !args.password) {
+      throw new Error("Please fill in all the fields");
     }
     //lowercase the email
     args.email = args.email.toLowerCase();
