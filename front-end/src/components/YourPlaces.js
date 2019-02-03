@@ -5,6 +5,7 @@ import ProfilePlaces from './ProfilePlaces'
 import Preferences from './Preferences'
 import PlacesModal from './PlacesModal'
 import { Tabs, Icon, Checkbox } from 'antd'
+import OverlayCalendar from './OverlayCalendar'
 
 const TabPane = Tabs.TabPane
 const CheckboxGroup = Checkbox.Group
@@ -71,7 +72,7 @@ class YourPlaces extends Component {
     const file = await res.json();
     const variables = 
       {
-        id: this.props.match.params.username,
+      id: this.props.match.params.username,
       image: file.secure_url
       }
     updateUserMutation({ variables })
@@ -93,36 +94,36 @@ class YourPlaces extends Component {
           return(
             <Mutation
               mutation={UPDATE_USER_MUTATION}
-              variables={{ id: this.props.match.params, image: "test" }}
-              refetchQueries={[{ SINGLE_USER_QUERY }]}
+              variables={{ id: this.props.match.params }}
             >
               {(updateUser, { loading, error }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error: {error.message}</p>
                 return <React.Fragment>
-                  <h1>Meet {data.user.name}</h1>
-                  <PlacesModal visible={this.state.visible} onOk={this.closeModal} onCancel={this.closeModal} place={this.state.place} isLoading={this.state.isLoading} />
-                  {this.state.image || data.user.image ? <img src={this.state.image || data.user.image} alt="" /> : <div className="upload-btn-wrapper">
-                    <Icon className="upload-icon" type="user-add" />
-                    <input type="file" onChange={e => this.uploadPhoto(e, updateUser)} name="myfile" />
-                  </div>}
-                  <Tabs defaultActiveKey="1">
-                    <TabPane tab={<span>
-                      <Icon type="star" />
-                      To Try
-                  </span>} key="1">
-                      <ProfilePlaces showModal={this.showModal} match={this.props.match} type={"todo"} />
-                    </TabPane>
-                    <TabPane tab={<span>
-                      <Icon type="heart" />
-                      Favourites
-                  </span>} key="2">
-                      <ProfilePlaces showModal={this.showModal} match={this.props.match} type={"favourite"} />
-                    </TabPane>
-                  </Tabs>
-                  <Preferences currentUser={this.props.currentUser} />
-                  <CheckboxGroup onChange={this.props.checkBoxClick} />
-                </React.Fragment>;
+                    <h1>Meet {data.user.name}</h1>
+                    <PlacesModal visible={this.state.visible} onOk={this.closeModal} onCancel={this.closeModal} place={this.state.place} isLoading={this.state.isLoading} />
+                    {this.state.image || data.user.image ? <img src={this.state.image || data.user.image} alt="" /> : <div className="upload-btn-wrapper">
+                        <Icon className="upload-icon" type="user-add" />
+                        <input type="file" onChange={e => this.uploadPhoto(e, updateUser)} name="myfile" />
+                      </div>}
+                    <Tabs defaultActiveKey="1">
+                      <TabPane tab={<span>
+                            <Icon type="star" />
+                            To Try
+                          </span>} key="1">
+                        <ProfilePlaces showModal={this.showModal} match={this.props.match} type={"todo"} />
+                      </TabPane>
+                      <TabPane tab={<span>
+                            <Icon type="heart" />
+                            Favourites
+                          </span>} key="2">
+                        <ProfilePlaces showModal={this.showModal} match={this.props.match} type={"favourite"} />
+                      </TabPane>
+                    </Tabs>
+                    <OverlayCalendar addOverlayCalendar={this.props.addOverlayCalendar}/>
+                    <Preferences currentUser={this.props.currentUser} />
+                    <CheckboxGroup onChange={this.props.checkBoxClick} />
+                  </React.Fragment>;
               }}
             </Mutation>
           )

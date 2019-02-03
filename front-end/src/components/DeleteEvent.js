@@ -31,9 +31,8 @@ class DeleteEvent extends Component {
   deleteEvent = async (e, deleteEventMutation) => {
     e.preventDefault();
     if(window.confirm('Are you sure you want to delete this event?')) {
-      await deleteEventMutation();
+      await deleteEventMutation().then(() => this.props.history.push(`/${this.props.userId}`))
     }
-    this.props.history.push(`/${this.props.userId}`);
   }
 
   render() {

@@ -5,11 +5,12 @@ import { Route, Switch } from "react-router-dom";
 import moment from "moment";
 import gql from "graphql-tag";
 import { Spin } from "antd";
+import { ApolloConsumer } from "react-apollo";
 import EventDetails from "./EventDetails";
 import UpdateEvent from "./UpdateEvent";
 import YourPlaces from "./YourPlaces";
 import "../fullcalendar.min.css";
-import {UPDATE_EVENT_MUTATION} from "./UpdateEvent";
+import { UPDATE_EVENT_MUTATION } from "./UpdateEvent";
 
 const ALL_USER_EVENTS_QUERY = gql`
   query ALL_USER_EVENTS_QUERY($id: ID!) {
@@ -20,7 +21,7 @@ const ALL_USER_EVENTS_QUERY = gql`
       description
       start
       end
-      user{
+      user {
         id
         name
       }
@@ -35,7 +36,8 @@ const ALL_USER_EVENTS_QUERY = gql`
 class Profile extends Component {
   state = {
     selectedDateStart: "",
-    selectedDateEnd: ""
+    selectedDateEnd: "",
+    overlayEvents: []
   };
 
   eventClick = calEvent => {
@@ -44,7 +46,7 @@ class Profile extends Component {
     );
   };
 
-  eventDrop = async(eventDetails, updateEvent) => {
+  eventDrop = async (eventDetails, updateEvent) => {
     await updateEvent({
       variables: {
         id: eventDetails.id,
@@ -61,7 +63,7 @@ class Profile extends Component {
           title: eventDetails.title,
           description: eventDetails.description,
           location: eventDetails.location,
-          user: eventDetails.user,
+          user: eventDetails.user
         }
       }
     });
@@ -86,11 +88,29 @@ class Profile extends Component {
     );
   };
 
+  addOverlayCalendar = async (selectedUsers, client) => {
+    const { data } = await client.query({
+      query: ALL_USER_EVENTS_QUERY,
+      variables: { id: selectedUsers }
+    });
+    const coloredEvents = data.events.map(event => {
+      event.color = 'blue'
+      return event
+    })
+    this.setState({
+      overlayEvents: coloredEvents
+    })
+  };
+
   render() {
     return (
       <div className="entire-profile">
         <div className="profile-yourPlaces">
-          <YourPlaces match={this.props.match} />
+          <ApolloConsumer>
+            {client => {
+              return <YourPlaces match={this.props.match} addOverlayCalendar={selectedUsers => this.addOverlayCalendar(selectedUsers, client)} />;
+            }}
+          </ApolloConsumer>
         </div>
         <div className="profile-main">
           <Switch />
@@ -126,7 +146,7 @@ class Profile extends Component {
                 variables={{ id: this.props.match.params.username }}
               >
                 {({ data, error, loading }) => {
-                  if (loading) return <Spin/>;
+                  if (loading) return <Spin />;
                   if (error) return <p>Error: {error.message}</p>;
                   return (
                     <Mutation mutation={UPDATE_EVENT_MUTATION}>
@@ -146,7 +166,7 @@ class Profile extends Component {
                             editable={true}
                             eventDrop={e => this.eventDrop(e, updateEvent)}
                             eventLimit={true}
-                            events={data.events}
+                            events={data.events.concat(this.state.overlayEvents)}
                             eventClick={this.eventClick}
                             dayClick={this.dayClick}
                             se

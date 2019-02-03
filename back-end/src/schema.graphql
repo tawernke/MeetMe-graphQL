@@ -32,7 +32,7 @@ type Mutation {
 }
 
 type Query {
-  favoriteBusinesses(term: String, latitude: Float, longitude: Float): Businesses!
+  favoriteBusinesses(term: String, latitude: Float, longitude: Float, location: String): Businesses!
   events(userId: ID): [Event]
   event(where: EventWhereUniqueInput!): Event
   places(userId: ID, type: String): [Place]!

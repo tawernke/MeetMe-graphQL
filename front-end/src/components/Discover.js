@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
+import { Query, ApolloConsumer } from "react-apollo";
 import gql from "graphql-tag";
 import Places from "./Places";
 import { Spin } from "antd";
 
 const YELP_PLACES_QUERY = gql`
-  query YELP_PLACES_QUERY($latitude: Float, $longitude: Float) {
-    favoriteBusinesses(latitude: $latitude, longitude: $longitude) {
+  query YELP_PLACES_QUERY($latitude: Float, $longitude: Float, $location: String, $term: String) {
+    favoriteBusinesses(latitude: $latitude, longitude: $longitude, term: $term, location: $location) {
       business {
         name
         phone
@@ -30,32 +30,46 @@ class Discover extends Component {
     placeSuggestions: [],
     savedPlaces: [],
     redirect: false,
-    city: "",
-    street: "",
-    streetNumber: "",
+    city: '',
+    street: '',
+    streetNumber: '',
     isLoading: false,
-    location: {
-      latitude: 49.28531,
-      longitude: -123.11385
-    }
+    coordinates: {
+      latitude:9.277371099999996, 
+      longitude: -123.12789780000001
+    },
+    location: ""
   };
 
-  // componentDidMount() {
-  //   new Promise((resolve, reject) => {
-  //     navigator.geolocation.getCurrentPosition(pos => {
-  //       const coord = {
-  //         latitude: pos.coords.latitude,
-  //         longitude: pos.coords.longitude
-  //       };
-  //       resolve(coord);
-  //     });
-  //   }).then(coord =>
-  //     this.setState({
-  //       location: coord,
-  //       isLoading: false
-  //     })
-  //   );
-  // }
+  componentDidMount() {
+    new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const coord = {
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        };
+        resolve(coord);
+      });
+    }).then(coord =>
+      this.setState({
+        coordinates: coord,
+        isLoading: false
+      })
+    );
+  }
+
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  searchResults = places => {
+    this.setState({
+      searchResults: places
+    })
+  }
 
   render() {
     const { streetNumber, street, city } = this.state;
@@ -64,58 +78,92 @@ class Discover extends Component {
         {this.state.isLoading ? (
           <p>Loading...</p>
         ) : (
-          <Query query={YELP_PLACES_QUERY} variables={this.state.location}>
-            {({ data, error, loading }) => {
-              if (loading) return <Spin />;
-              if (error) return <p>Error: {error.message}</p>;
+          <ApolloConsumer>
+            {client => {
               return (
-                <div className="discover-page">
-                  <div>
-                    <div>
-                      <h5 className="discover-current-address">
-                        {streetNumber}, {street}, {city}
-                      </h5>
-                      <img
-                        className="discover-location-icon"
-                        alt=""
-                        src="/location_on-24px.svg"
-                      />
-                      <h4 className="discover-location-heading">
-                        Showing places near you
-                      </h4>
-                    </div>
-                    <form
-                      className="discover-form-search"
-                      onSubmit={e => {
-                        this.searchPlaces(e);
-                      }}
-                    >
-                      <input
-                        className="discover-search-textbox form-control"
-                        name="location"
-                        placeholder="Add a location here"
-                      />
-                      <input
-                        className="discover-search-textbox form-control"
-                        name="searchTerm"
-                        placeholder="Add a search term here. (eg. coffee, bar)"
-                      />
-                      <button className="btn btn-primary" type="submit">
-                        Search
-                      </button>
-                    </form>
-                    <div className="discover-container">
-                      <div className="row justify-content-center">
-                        <div className="card-deck">
-                          <Places places={data.favoriteBusinesses.business} />
+                <Query
+                  query={YELP_PLACES_QUERY}
+                  variables={{
+                    latitude: this.state.coordinates.latitude,
+                    longitude: this.state.coordinates.longitude
+                  }}
+                >
+                  {({ data, error, loading }) => {
+                    if (loading) return <Spin />;
+                    if (error)
+                      return <p>Error: {error.message}</p>;
+                    return (
+                      <div className="discover-page">
+                        <div>
+                          <div>
+                            <h5 className="discover-current-address">
+                              {streetNumber}, {street}, {city}
+                            </h5>
+                            <img
+                              className="discover-location-icon"
+                              alt=""
+                              src="/location_on-24px.svg"
+                            />
+                            <h4 className="discover-location-heading">
+                              Showing places near you
+                            </h4>
+                          </div>
+                          <form
+                            className="discover-form-search"
+                            onSubmit={async e => {
+                              e.preventDefault();
+                              const { data } = await client.query(
+                                {
+                                  query: YELP_PLACES_QUERY,
+                                  variables: {
+                                    term: this.state.searchTerm,
+                                    location: this.state.location
+                                  }
+                                }
+                              );
+                              this.searchResults(data.favoriteBusinesses.business)
+                            }
+                          }
+                          >
+                            <input
+                              className="discover-search-textbox form-control"
+                              name="location"
+                              placeholder="Add a location here"
+                              onChange={this.handleChange}
+                            />
+                            <input
+                              className="discover-search-textbox form-control"
+                              name="searchTerm"
+                              placeholder="Add a search term here. (eg. coffee, bar)"
+                              onChange={this.handleChange}
+                            />
+                            <button
+                              className="btn btn-primary"
+                              type="submit"
+                            >
+                              Search
+                            </button>
+                          </form>
+                          <div className="discover-container">
+                            <div className="row justify-content-center">
+                              <div className="card-deck">
+                                <Places
+                                  places={
+                                    this.state.searchResults || data.favoriteBusinesses
+                                      .business
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    );
+                  }}
+                </Query>
               );
             }}
-          </Query>
+          </ApolloConsumer>
         )}
       </>
     );

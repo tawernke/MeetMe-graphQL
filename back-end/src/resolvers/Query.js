@@ -7,7 +7,7 @@ const yelp = new Yelp(apiKey)
 
 const Query = {
   async favoriteBusinesses(parent, args, context, info) {
-    console.log(args);
+    console.log(args)
     const res = await yelp.delegate("query", "search", args, context, info);
     return res;
   },
