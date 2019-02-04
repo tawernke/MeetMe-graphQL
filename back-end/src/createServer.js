@@ -9,8 +9,7 @@ const db = require("./db");
 //Create the GraphQL Yoga Server. GraphQL Yoga Server is an express server that sits on top of apollo server
 
 function createServer() {
-  const apiKey =
-    "qHwBybthx8SOAu_231Jff9xKWrt9cq3p2lc1oytmPLmQSdyizg4mVm2wWVTgx9yjkvH-nJrNLdpnhoQRs0fhSWgZ8Ef1aQCAzPf15zPn6WC2nxLiDmpGiwOmGGm-WnYx";
+  const apiKey = process.env.YELP_API_KEY
   const yelp = new Yelp(apiKey);
   const typeDefs = importSchema("src/schema.graphql");
   return new GraphQLServer({
@@ -25,11 +24,11 @@ function createServer() {
         },
         users: forwardTo("db"),
 
-        async events(parent, { userId }, ctx, info) {
+        async events(parent, args, ctx, info) {
           const events = await ctx.db.query.events(
             {
               where: {
-                user_some: { id_contains: userId }
+                user_some: { id_contains: args.userId }
               }
             },
             info

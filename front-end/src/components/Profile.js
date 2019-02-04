@@ -26,10 +26,6 @@ const ALL_USER_EVENTS_QUERY = gql`
         name
       }
     }
-    # preferences {
-    #   id
-    #   name
-    # }
   }
 `;
 
@@ -89,12 +85,19 @@ class Profile extends Component {
   };
 
   addOverlayCalendar = async (selectedUsers, client) => {
+    if(selectedUsers.length === 0) {
+      this.setState({
+        overlayEvents:[]
+      })
+      return
+    }
     const { data } = await client.query({
       query: ALL_USER_EVENTS_QUERY,
       variables: { id: selectedUsers }
     });
+    const colours = ['red', 'green', 'yellow', 'purple']
     const coloredEvents = data.events.map(event => {
-      event.color = 'blue'
+      event.color = 'red'
       return event
     })
     this.setState({
