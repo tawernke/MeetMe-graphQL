@@ -6,10 +6,12 @@ import { SINGLE_USER_QUERY } from "./YourPlaces";
 
 const ADD_FRIEND_MUTATION = gql`
   mutation ADD_FRIEND_MUTATION(
+    $id: ID!
     $email: String!
     $friendRequester: String!
   ) {
     sendFriendRequest(
+      id: $id
       email: $email
       friendRequester: $friendRequester
     ) {
@@ -18,10 +20,11 @@ const ADD_FRIEND_MUTATION = gql`
   }
 `;
 
-class AddFriend extends Component {
+class SendFriendRequest extends Component {
   sendFriendRequest = async (event, sendFriendRequest, newFriendDetails) => {
     await sendFriendRequest({
       variables: {
+        id: newFriendDetails.id,
         email: newFriendDetails.email,
         friendRequester: this.props.me.name
       }
@@ -36,7 +39,7 @@ class AddFriend extends Component {
         variables={{ id: this.props.friendRequestId }}
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>loading...</p>;
+          if (loading) return null
           return (
             <Mutation mutation={ADD_FRIEND_MUTATION}>
               {(sendFriendRequest, { error, loading }) => {
@@ -62,4 +65,4 @@ class AddFriend extends Component {
   }
 }
 
-export default AddFriend;
+export default SendFriendRequest;

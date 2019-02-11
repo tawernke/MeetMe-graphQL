@@ -292,9 +292,37 @@ const Mutations = {
         \n\n 
         <a href="${
           process.env.FRONTEND_URL
-        }/acceptFriendRequest">Click Here to accept the request</a>`)
+        }/acceptFriendRequest/${id}">Click Here to accept the request</a>`)
     });
     return { message: "Thanks" };
+  },
+
+  async acceptFriendRequest(parent, args, ctx, info) {
+    //Updates user that accepts invite
+    const user = await ctx.db.mutation.updateUser({
+      where: {
+        id: ctx.request.userId
+      },
+      data: {
+        friends: {
+          connect: { id: args.id}
+        },
+      },
+    }, info)
+
+    //Updates user that sent the invite
+    const otherUser = await ctx.db.mutation.updateUser({
+      where: {
+        id: args.id
+      },
+      data: {
+        friends: {
+          connect: { id: ctx.request.userId}
+        }
+      }
+    }, info)
+    
+    return user
   }
 };
 

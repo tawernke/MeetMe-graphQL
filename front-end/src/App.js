@@ -10,8 +10,8 @@ import PleaseSignIn from "./components/PleaseSignIn";
 import Navbar from "./components/Navbar";
 import RequestReset from "./components/RequestReset";
 import Reset from "./components/Reset";
+import AcceptFriendRequest from './components/AcceptFriendRequest'
 import "./App.css";
-import AddFriend from "./components/AddFriend";
 
 const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY {
@@ -56,8 +56,8 @@ class App extends Component {
               render={routeProps => <RequestReset {...routeProps} />}
             />
             <Route
-              path="/addFriend"
-              render={routeProps => <AddFriend {...routeProps} />}
+              path="/acceptFriendRequest/:friendId"
+              render={routeProps => <AcceptFriendRequest {...routeProps} />}
             />
             <PleaseSignIn history={this.props.history}>
               <Query query={ALL_PLACES_QUERY}>

@@ -3,7 +3,7 @@ import { Select } from "antd";
 import "antd/dist/antd.css";
 import { Query } from "react-apollo";
 import { ALL_USERS_QUERY } from "./EventDetails";
-import AddFriend from "./AddFriend";
+import SendFriendRequest from "./SendFriendRequest";
 
 const Option = Select.Option;
 
@@ -19,7 +19,6 @@ class NavBarSearch extends Component {
     if (isFriends || userId === this.props.me.id) {
       this.props.history.push(`/${userId}`);
     } else {
-      // this.props.history.push(`/addFriend`, [userDetails.props.children, userDetails.props.value]);
       this.setState({
         visible: true,
         friendRequestId: userId
@@ -37,12 +36,11 @@ class NavBarSearch extends Component {
     return (
       <>
         {this.state.visible ? (
-          <AddFriend
+          <SendFriendRequest
             friendRequestId={this.state.friendRequestId}
             visible={this.state.visible}
             onOk={this.closeModal}
             onCancel={this.closeModal}
-            place={this.state.place}
             me={this.props.me}
           />
         ) : null}

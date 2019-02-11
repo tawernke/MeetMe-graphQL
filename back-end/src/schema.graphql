@@ -6,8 +6,23 @@ type SuccessMessage {
 }
 
 type Mutation {
-  createEvent(title: String, location: String, description: String, start: String, end: String, user: [ID]): Event!
-  updateEvent(id: ID!, title: String, location: String, description: String, start: String, end: String, user: [ID]): Event!
+  createEvent(
+    title: String
+    location: String
+    description: String
+    start: String
+    end: String
+    user: [ID]
+  ): Event!
+  updateEvent(
+    id: ID!
+    title: String
+    location: String
+    description: String
+    start: String
+    end: String
+    user: [ID]
+  ): Event!
   deleteEvent(id: ID!): Event
   updateUser(id: ID!, image: String!): User!
   signup(email: String!, password: String!, name: String!): User!
@@ -28,19 +43,29 @@ type Mutation {
   ): Place!
   deletePlace(id: ID): Place
   requestReset(email: String!): SuccessMessage
-  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
-  sendFriendRequest(email: String!, friendRequester: String!): SuccessMessage
+  resetPassword(
+    resetToken: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
+  sendFriendRequest(id: ID!, email: String!, friendRequester: String!): SuccessMessage
+  acceptFriendRequest(id: ID!): User
 }
 
 type Query {
-  favoriteBusinesses(term: String, latitude: Float, longitude: Float, location: String): Businesses!
+  favoriteBusinesses(
+    term: String
+    latitude: Float
+    longitude: Float
+    location: String
+  ): Businesses!
   events(userId: [ID]): [Event]
   event(where: EventWhereUniqueInput!): Event
   places(type: String): [Place]!
   user(id: ID!): User!
   users: [User]
   me: User
-} 
+}
 
 type User {
   id: ID!
