@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import RequestReset from "./components/RequestReset";
 import Reset from "./components/Reset";
 import "./App.css";
+import AddFriend from "./components/AddFriend";
 
 const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY {
@@ -33,9 +34,8 @@ const ALL_PLACES_QUERY = gql`
 class App extends Component {
   render() {
     return (
-      <div>
-        <Navbar history={this.props.history} />
-        <div className="app">
+      <div className="app">
+      <Navbar history={this.props.history}/>
           <Switch>
             <Route
               exact
@@ -52,8 +52,12 @@ class App extends Component {
               render={routeProps => <Reset {...routeProps} />}
             />
             <Route
-              path="/resetPassword/"
+              path="/requestReset"
               render={routeProps => <RequestReset {...routeProps} />}
+            />
+            <Route
+              path="/addFriend"
+              render={routeProps => <AddFriend {...routeProps} />}
             />
             <PleaseSignIn history={this.props.history}>
               <Query query={ALL_PLACES_QUERY}>
@@ -78,7 +82,6 @@ class App extends Component {
               </Query>
             </PleaseSignIn>
           </Switch>
-        </div>
         </div>
     );
   }

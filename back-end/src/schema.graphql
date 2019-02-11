@@ -29,17 +29,18 @@ type Mutation {
   deletePlace(id: ID): Place
   requestReset(email: String!): SuccessMessage
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
+  sendFriendRequest(email: String!, friendRequester: String!): SuccessMessage
 }
 
 type Query {
   favoriteBusinesses(term: String, latitude: Float, longitude: Float, location: String): Businesses!
-  events(userId: ID): [Event]
+  events(userId: [ID]): [Event]
   event(where: EventWhereUniqueInput!): Event
-  places(userId: ID, type: String): [Place]!
+  places(type: String): [Place]!
   user(id: ID!): User!
   users: [User]
   me: User
-}
+} 
 
 type User {
   id: ID!
@@ -49,6 +50,7 @@ type User {
   permissions: [Permission!]!
   places: [Place]
   event: [Event]
+  friends: [User]
 }
 
 type Event {

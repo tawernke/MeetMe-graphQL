@@ -113,6 +113,12 @@ const Mutations = {
   },
 
   async createPlace(parent, args, ctx, info) {
+    const currentPlaces = await ctx.db.query
+      .places
+      // { where: { user: {id: ctx.request.userId } }},
+      // `{id}`
+      ();
+    // console.log(currentPlaces)
     const place = await ctx.db.mutation.createPlace(
       {
         data: {
@@ -130,13 +136,13 @@ const Mutations = {
   },
 
   async deletePlace(parent, args, ctx, info) {
-    const id = { ...args };
+    const where = { id: args.id };
     //1. find the event
-    const place = await ctx.db.query.place({ where }, `{id}`);
+    // const place = await ctx.db.query.place({ where: {id: id} }, `{id}`);
     //2. Check if they own that item, or they have permissions
     //TODO
     //3. Delete it
-    return ctx.db.mutation.deletePlace({ where: id }, info);
+    return ctx.db.mutation.deletePlace({ where }, info);
   },
 
   // async createPreference(parent, args, ctx, info) {
@@ -275,6 +281,20 @@ const Mutations = {
     });
     // 8. return the new user
     return updatedUser;
+  },
+
+  async sendFriendRequest(parent, {email ,id, friendRequester }, ctx, info) {
+    const mailRes = await transport.sendMail({
+      from: "t.a.wernke@gmail.com",
+      to: email,
+      subject: "New Friend Request",
+      html: makeANiceEmail(`You have a new friend request from ${friendRequester}! 
+        \n\n 
+        <a href="${
+          process.env.FRONTEND_URL
+        }/acceptFriendRequest">Click Here to accept the request</a>`)
+    });
+    return { message: "Thanks" };
   }
 };
 

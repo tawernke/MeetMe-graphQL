@@ -42,6 +42,10 @@ const ALL_USERS_QUERY = gql`
    users {
      id
      name
+     friends {
+       id
+       name
+     }
    }
  }
 `

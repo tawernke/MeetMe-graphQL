@@ -92,6 +92,10 @@ class Discover extends Component {
                     if (loading) return <Spin />;
                     if (error)
                       return <p>Error: {error.message}</p>;
+                    console.log(
+                      data
+                        
+                    );
                     return (
                       <div className="discover-page">
                         <div>
@@ -121,6 +125,7 @@ class Discover extends Component {
                                   }
                                 }
                               );
+
                               this.searchResults(data.favoriteBusinesses.business)
                             }
                           }

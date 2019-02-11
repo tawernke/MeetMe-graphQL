@@ -1,6 +1,7 @@
 #endpoint: ${env:PRISMA_ENDPOINT}
 #endpoint: https://meet-me-production-96f801f58d.herokuapp.com/meet-me-prod/prod
-endpoint: https://meet-me-production-96f801f58d.herokuapp.com/meet-me-prod/prod
+#endpoint: https://meet-me-production-96f801f58d.herokuapp.com/meet-me-prod/prod
+endpoint: https://us1.prisma.sh/tim-wernke-722f56/meetme/dev
 # endpoint: https://meet-me-production-96f801f58d.herokuapp.com/meet-me-prod/prod
 datamodel: datamodel.graphql
 secret: ${env:PRISMA_SECRET}

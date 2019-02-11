@@ -60,27 +60,32 @@ const DELETE_PLACE_MUTATION = gql`
 `;
 
 class Place extends Component {
-  createPlace = async (e, createPlaceMutation, placeType) => {
+  createPlace = async (e, createPlaceMutation, type) => {
     await createPlaceMutation({
       variables: {
-        type: placeType,
+        type,
         ...this.props.place
       },
       refetchQueries: [
         {
-          query: ALL_PLACES_QUERY
+          query: ALL_PLACES_QUERY,
+          variables: { type } 
         }
       ]
     });
   };
 
-  deletePlace = async(placeId, deletePlaceMutation) => {
+  deletePlace = async(placeId, deletePlaceMutation, type) => {
     await deletePlaceMutation({
-      variables: {id: placeId},
-      refetchQueries: [{
-        query: ALL_PLACES_QUERY
-      }]
-    })
+      variables: { id: placeId },
+      refetchQueries: [
+        {
+          query: ALL_PLACES_QUERY,
+          variables: { type }
+        }
+      ],
+      awaitRefetchQueries: true
+    });
   };
 
   render() {
@@ -108,7 +113,7 @@ class Place extends Component {
                             theme="filled"
                             style={{ fontSize: 25, color: "#FDBE34" }}
                             onClick={() =>
-                              this.deletePlace(this.props.place.id, deletePlace)
+                              this.deletePlace(this.props.place.id, deletePlace, 'todo')
                             }
                           />
                         ) : (
@@ -129,7 +134,7 @@ class Place extends Component {
                             theme="filled"
                             style={{ fontSize: 25, color: "red" }}
                             onClick={() =>
-                              this.deletePlace(this.props.place.id, deletePlace)
+                              this.deletePlace(this.props.place.id, deletePlace, 'favourite')
                             }
                           />
                         ) : (

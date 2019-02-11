@@ -3,8 +3,8 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 const ALL_PLACES_QUERY = gql`
-  query ALL_PLACES_QUERY($id: ID! $type: String!) {
-    places(userId: $id type: $type) {
+  query ALL_PLACES_QUERY($type: String!) {
+    places(type: $type) {
       id
       address1
       city
@@ -24,14 +24,16 @@ const ALL_PLACES_QUERY = gql`
 class Places extends Component {
   render() {
     return (
-      <Query 
-        query={ALL_PLACES_QUERY} 
-        variables={{id: this.props.match.params.username, type: this.props.type}}
+      <Query
+        query={ALL_PLACES_QUERY}
+        variables={{ type: this.props.type }}
+        fetchPolicy={'network-only'}
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading...</p>
-          if (error) return <p>Error: {error.message}</p>
-          return <div>
+          if (loading) return <p>Loading...</p>;
+          if (error) return <p>Error: {error.message}</p>;
+          return (
+            <div>
               <ul className="your-places-list">
                 {data.places.map(place => (
                   <li
@@ -44,10 +46,12 @@ class Places extends Component {
                 ))}
               </ul>
             </div>
+          );
         }}
       </Query>
-    )
+    );
   }
 }
 
 export default Places
+export { ALL_PLACES_QUERY }

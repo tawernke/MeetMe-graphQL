@@ -27,6 +27,7 @@ const SINGLE_USER_QUERY = gql`
       id
       image
       name
+      email
     }
   }
 `
@@ -135,3 +136,4 @@ class YourPlaces extends Component {
 }
 
 export default YourPlaces
+export { SINGLE_USER_QUERY }

@@ -13,7 +13,7 @@ const Navbar = props => (
   <Query query={CURRENT_USER_QUERY}>
     {({ data: { me }, error, loading }) => (
       <Header
-        style={{ position: "fixed", zIndex: 1, width: "100%" }}
+        style={{ position: "realtive", zIndex: 1, width: "100%" }}
       >
         {me && (
           <React.Fragment>
@@ -28,7 +28,7 @@ const Navbar = props => (
                 <Signout />
               </Menu.Item>
               <Menu.Item key="4">
-                <NavBarSearch history={props.history} />
+                <NavBarSearch me={me} history={props.history} />
               </Menu.Item>
             </Menu>
           </React.Fragment>

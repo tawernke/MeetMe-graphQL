@@ -13,7 +13,7 @@ import "../fullcalendar.min.css";
 import { UPDATE_EVENT_MUTATION } from "./UpdateEvent";
 
 const ALL_USER_EVENTS_QUERY = gql`
-  query ALL_USER_EVENTS_QUERY($id: ID!) {
+  query ALL_USER_EVENTS_QUERY($id: [ID]!) {
     events(userId: $id) {
       id
       title
@@ -146,7 +146,7 @@ class Profile extends Component {
             render={() => (
               <Query
                 query={ALL_USER_EVENTS_QUERY}
-                variables={{ id: this.props.match.params.username }}
+                variables={{ id: [this.props.match.params.username] }}
               >
                 {({ data, error, loading }) => {
                   if (loading) return <Spin />;
@@ -164,7 +164,7 @@ class Profile extends Component {
                             }}
                             selectable={true}
                             select={this.select}
-                            defaultDate={moment()}
+                            // defaultDate={moment()}
                             navLinks={true}
                             editable={true}
                             eventDrop={e => this.eventDrop(e, updateEvent)}

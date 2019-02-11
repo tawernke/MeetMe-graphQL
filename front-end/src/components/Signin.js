@@ -68,6 +68,7 @@ class Signin extends Component {
                     placeholder="password"
                     onChange={this.saveToState}
                   />
+                  <p>Click <Link to="/requestReset">here</Link> to reset your password</p>
                   <button
                     type="submit"
                     className="btn btn-primary logon-button"
