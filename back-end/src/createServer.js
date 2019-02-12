@@ -24,6 +24,15 @@ function createServer() {
         },
         users: forwardTo("db"),
 
+        async friends(parent, args, ctx, info) {
+          const friends = await ctx.db.query.users({
+            where: {
+              friends_some: { id_contains: ctx.request.userId}
+            }
+          }, info)
+          return friends
+        },
+
         async events(parent, args, ctx, info) {
           const events = await ctx.db.query.events(
             {

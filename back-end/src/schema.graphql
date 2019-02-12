@@ -65,6 +65,7 @@ type Query {
   user(id: ID!): User!
   users: [User]
   me: User
+  friends: [User]
 }
 
 type User {
