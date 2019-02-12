@@ -292,7 +292,7 @@ const Mutations = {
         \n\n 
         <a href="${
           process.env.FRONTEND_URL
-        }/acceptFriendRequest/${id}">Click Here to accept the request</a>`)
+        }/acceptFriendRequest/${ctx.request.userId}">Click Here to accept the request</a>`)
     });
     return { message: "Thanks" };
   },

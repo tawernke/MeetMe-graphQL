@@ -48,7 +48,7 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  sendFriendRequest(id: ID!, email: String!, friendRequester: String!): SuccessMessage
+  sendFriendRequest(email: String!, friendRequester: String!): SuccessMessage
   acceptFriendRequest(id: ID!): User
 }
 
