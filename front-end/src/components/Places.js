@@ -29,28 +29,24 @@ const Places = props => {
         if (loading) return <p>Loading...</p>;
         const yelpPlaces = props.places.map(place => {
           if (!data) return null;
-          let newPlace = {
-            isFavourited: false,
-            isToDoSaved: false
-          };
+          let newPlace = {};
           data.places.forEach(savedPlace => {
             if (
               place.name === savedPlace.name &&
               savedPlace.type === "favourite"
             ) {
-              newPlace.isFavourited = true;
-              newPlace.Id = savedPlace.id;
+              newPlace.favouriteId = savedPlace.id;
             }
             if (place.name === savedPlace.name && savedPlace.type === "todo") {
-              newPlace.isToDoSaved = true;
-              newPlace.Id = savedPlace.id;
+              newPlace.toDoId = savedPlace.id;
             }
           });
           return (
             <Place
               key={newPlace.Id}
               place={{
-                id: newPlace.Id,
+                toDoId: newPlace.toDoId,
+                favouriteId: newPlace.favouriteId,
                 address1: place.location.address1,
                 city: place.location.city,
                 country: place.location.country,

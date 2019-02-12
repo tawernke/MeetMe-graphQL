@@ -90,12 +90,7 @@ class Discover extends Component {
                 >
                   {({ data, error, loading }) => {
                     if (loading) return <Spin />;
-                    if (error)
-                      return <p>Error: {error.message}</p>;
-                    console.log(
-                      data
-                        
-                    );
+                    if (error) return <p>Error: {error.message}</p>;
                     return (
                       <div className="discover-page">
                         <div>

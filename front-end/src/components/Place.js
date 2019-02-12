@@ -61,6 +61,7 @@ const DELETE_PLACE_MUTATION = gql`
 
 class Place extends Component {
   createPlace = async (e, createPlaceMutation, type) => {
+    console.log(this.props.place)
     await createPlaceMutation({
       variables: {
         type,
@@ -106,14 +107,14 @@ class Place extends Component {
                   {(deletePlace, { error, loading }) => {
                     return (
                       <>
-                        {this.props.isToDoSaved ? (
+                        {this.props.place.toDoId ? (
                           <Icon
                             className="saveIcon"
                             type="star"
                             theme="filled"
                             style={{ fontSize: 25, color: "#FDBE34" }}
                             onClick={() =>
-                              this.deletePlace(this.props.place.id, deletePlace, 'todo')
+                              this.deletePlace(this.props.place.toDoId, deletePlace, 'todo')
                             }
                           />
                         ) : (
@@ -127,14 +128,14 @@ class Place extends Component {
                             }
                           />
                         )}
-                        {this.props.isFavourited ? (
+                        {this.props.place.favouriteId ? (
                           <Icon
                             className="saveIcon"
                             type="heart"
                             theme="filled"
                             style={{ fontSize: 25, color: "red" }}
                             onClick={() =>
-                              this.deletePlace(this.props.place.id, deletePlace, 'favourite')
+                              this.deletePlace(this.props.place.favouriteId, deletePlace, 'favourite')
                             }
                           />
                         ) : (
