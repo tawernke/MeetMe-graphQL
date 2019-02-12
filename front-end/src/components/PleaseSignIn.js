@@ -8,7 +8,7 @@ const PleaseSignIn = props => (
     {({data, loading}) => {
       if(loading) return <p>Loading...</p>
       if(!data.me) {
-        return <Signin history={props.history}/>
+        return <Signin match={props.match} history={props.history}/>
       }
       return props.children
     }}

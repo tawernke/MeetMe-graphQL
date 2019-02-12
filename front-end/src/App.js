@@ -10,7 +10,7 @@ import PleaseSignIn from "./components/PleaseSignIn";
 import Navbar from "./components/Navbar";
 import RequestReset from "./components/RequestReset";
 import Reset from "./components/Reset";
-import AcceptFriendRequest from './components/AcceptFriendRequest'
+import AcceptFriendRequest from "./components/AcceptFriendRequest";
 import "./App.css";
 
 const ALL_PLACES_QUERY = gql`
@@ -35,54 +35,56 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-      <Navbar history={this.props.history}/>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(routeProps) => <Signin {...routeProps} />}
-            />
-            <Route exact path="/discover" render={() => <Discover />} />
-            <Route
-              path="/signup"
-              render={routeProps => <Signup {...routeProps} />}
-            />
-            <Route
-              path="/resetPassword/:resetToken"
-              render={routeProps => <Reset {...routeProps} />}
-            />
-            <Route
-              path="/requestReset"
-              render={routeProps => <RequestReset {...routeProps} />}
-            />
-            <Route
-              path="/acceptFriendRequest/:friendId"
-              render={routeProps => <AcceptFriendRequest {...routeProps} />}
-            />
-            <PleaseSignIn history={this.props.history}>
-              <Query query={ALL_PLACES_QUERY}>
-                {({ data, error, loading }) => {
-                  if (loading) return <p>Loading..,</p>;
-                  if (error) return <p>Error: {error.message}</p>;
-                  return (
-                    <Switch>
-                      <Route
-                        path="/:username"
-                        render={routeProps => (
-                          <Profile
-                            {...routeProps}
-                            {...this.state}
-                            showModal={this.showModal}
-                          />
-                        )}
-                      />
-                    </Switch>
-                  );
-                }}
-              </Query>
-            </PleaseSignIn>
-          </Switch>
-        </div>
+        <Navbar history={this.props.history} />
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={routeProps => <Signin {...routeProps} />}
+          />
+          <Route exact path="/discover" render={() => <Discover />} />
+          <Route
+            path="/signup"
+            render={routeProps => <Signup {...routeProps} />}
+          />
+          <Route
+            path="/resetPassword/:resetToken"
+            render={routeProps => <Reset {...routeProps} />}
+          />
+          <Route
+            path="/requestReset"
+            render={routeProps => <RequestReset {...routeProps} />}
+          />
+          <PleaseSignIn match={this.props.match} history={this.props.history}>
+            <Query query={ALL_PLACES_QUERY}>
+              {({ data, error, loading }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>Error: {error.message}</p>;
+                return (
+                  <Switch>
+                    <Route
+                      path="/acceptFriendRequest/:friendId"
+                      render={routeProps => (
+                        <AcceptFriendRequest {...routeProps} />
+                      )}
+                    />
+                    <Route
+                      path="/:username"
+                      render={routeProps => (
+                        <Profile
+                          {...routeProps}
+                          {...this.state}
+                          showModal={this.showModal}
+                        />
+                      )}
+                    />
+                  </Switch>
+                );
+              }}
+            </Query>
+          </PleaseSignIn>
+        </Switch>
+      </div>
     );
   }
 }

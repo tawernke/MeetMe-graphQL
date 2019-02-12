@@ -35,7 +35,7 @@ class Signin extends Component {
         update={this.update}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
-        {(signup, { error, loading }) => {
+        {(signin, { error, loading }) => {
           return (
               <Form
                 method="post"
@@ -46,8 +46,10 @@ class Signin extends Component {
                     email: "",
                     password: ""
                   });
-                  const res = await signup();
-                  this.props.history.push(`/${res.data.signin.id}`);
+                  const res = await signin();
+                  if(!this.props.history.location.pathname.includes('/acceptFriendRequest')) {
+                    this.props.history.push(`/${res.data.signin.id}`);
+                  }
                 }}
               >
                 <fieldset disabled={loading} aria-busy={loading}>
