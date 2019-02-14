@@ -12,18 +12,24 @@ function createServer() {
   const apiKey = process.env.YELP_API_KEY
   const yelp = new Yelp(apiKey);
   const typeDefs = importSchema("src/schema.graphql");
+  
   return new GraphQLServer({
     typeDefs: "src/schema.graphql",
     resolvers: {
       Mutation,
       Query: {
+
+        //Return businesses from the yelp API
         async favoriteBusinesses(parent, args, context, info) {
           const res = await yelp.delegate("query", "search", args, context, info)
           return res
 
         },
+
+        //Querying all users
         users: forwardTo("db"),
 
+        //Users frieds query
         async friends(parent, args, ctx, info) {
           const friends = await ctx.db.query.users({
             where: {
@@ -33,6 +39,7 @@ function createServer() {
           return friends
         },
 
+        //Returns all event of a particular user
         async events(parent, args, ctx, info) {
           const events = await ctx.db.query.events(
             {
@@ -45,8 +52,10 @@ function createServer() {
           return events;
         },
 
+        //Returns a single event
         event: forwardTo("db"),
 
+        //Query for a single user
         async user(parent, { id }, ctx, info) {
           const places = await ctx.db.query.places(
             {
@@ -58,7 +67,8 @@ function createServer() {
           );
           return user;
         },
-        // places: forwardTo('db'),
+
+        //Returns the saved places for a user of a particular type
         async places(parent, args, ctx, info) {
           const places = await ctx.db.query.places(
             {
@@ -73,10 +83,8 @@ function createServer() {
           return places;
         },
 
-        // preferences: forwardTo('db'),
-
+        //Query who the logged in user is
         me(parent, args, ctx, info) {
-          //check if there is a current user ID
           if (!ctx.request.userId) {
             return null;
           }
@@ -88,6 +96,7 @@ function createServer() {
           );
         },
 
+        //Query for a single user
         async user(parent, { id }, ctx, info) {
           const user = await ctx.db.query.user({
             where: {
