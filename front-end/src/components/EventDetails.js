@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { Mutation, Query } from 'react-apollo'
 import moment from 'moment'
 import MultiSelectUsers from './MultiSelectUsers'
-import { DatePicker, TimePicker } from 'antd'
+import { DatePicker, TimePicker, Spin } from 'antd'
 import gql from 'graphql-tag'
 import Event from '../styles/Event'
 import { ALL_USER_EVENTS_QUERY } from "./Profile";
@@ -209,7 +209,7 @@ class EventDetails extends Component {
                     <p>Select Users:</p>
                     <Query query={ALL_USERS_QUERY}>
                       {({error, loading, data}) => {
-                        if(loading) return <p>Loading...</p>
+                          if (loading) return <div></div>
                         return (
                         <MultiSelectUsers 
                           allUsers={data.users}

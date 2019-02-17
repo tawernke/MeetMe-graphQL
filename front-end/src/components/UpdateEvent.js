@@ -3,6 +3,7 @@ import { Mutation, Query } from "react-apollo";
 import moment from "moment";
 import MultiSelectUsers from "./MultiSelectUsers";
 import "antd/dist/antd.css";
+import { Spin } from 'antd'
 import gql from "graphql-tag";
 import DeleteEvent from "./DeleteEvent";
 import { ALL_USERS_QUERY } from "./EventDetails";
@@ -119,7 +120,7 @@ class UpdateEvent extends Component {
       >
         {({ data, loading }) => {
           const event = data.event;
-          if (loading) return <p>Loading...</p>;
+          if (loading) return <div className="loadingSpinner"><Spin size="large" /></div>
           if (!event) return <p>Item not found for ID {this.props.id}</p>;
           return (
             <Mutation mutation={UPDATE_EVENT_MUTATION} update={this.update}>
