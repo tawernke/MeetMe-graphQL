@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { ALL_USER_EVENTS_QUERY } from "./Profile";
-import { ALL_PLACES_QUERY } from "./ProfilePlaces";
 
 const DELETE_EVENT_MUTATION = gql`
   mutation DELETE_EVENT_MUTATION($id: ID!) {

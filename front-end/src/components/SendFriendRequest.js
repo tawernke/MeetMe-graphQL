@@ -49,7 +49,7 @@ class SendFriendRequest extends Component {
                     onCancel={this.props.onCancel}
                     height={500}
                   >
-                    <img src={data.user.image} />
+                    <img src={data.user.image} alt={data.user.name}/>
                     <p>Would you like to add {data.user.name} as a friend?</p>
                   </Modal>
                 );

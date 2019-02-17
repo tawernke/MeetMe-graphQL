@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { Mutation, Query } from 'react-apollo'
 import moment from 'moment'
 import MultiSelectUsers from './MultiSelectUsers'
-import { DatePicker, TimePicker, Spin } from 'antd'
+import { DatePicker, TimePicker } from 'antd'
 import gql from 'graphql-tag'
 import Event from '../styles/Event'
 import { ALL_USER_EVENTS_QUERY } from "./Profile";

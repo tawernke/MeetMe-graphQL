@@ -16,7 +16,7 @@ class AcceptFriendRequest extends Component {
 
   acceptRequest = async (e, acceptFriendRequest) => {
     e.preventDefault()
-    const user = await acceptFriendRequest({
+    await acceptFriendRequest({
       variables: {
         id: this.props.match.params.friendId
       },

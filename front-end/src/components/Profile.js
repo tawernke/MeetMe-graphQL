@@ -96,7 +96,7 @@ class Profile extends Component {
       variables: { id: selectedUsers }
     });
     console.log(data)
-    const colours = ['red', 'green', 'yellow', 'purple']
+    // const colours = ['red', 'green', 'yellow', 'purple']
     const coloredEvents = data.events.map(event => {
       event.color = 'red'
       return event
