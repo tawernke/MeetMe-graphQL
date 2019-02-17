@@ -50,6 +50,7 @@ type Mutation {
   ): User!
   sendFriendRequest(email: String!, friendRequester: String!): SuccessMessage
   acceptFriendRequest(id: ID!): User
+  createPreference(name: String): Preference
 }
 
 type Query {
