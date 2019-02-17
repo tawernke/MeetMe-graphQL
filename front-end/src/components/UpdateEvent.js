@@ -10,6 +10,7 @@ import { ALL_USERS_QUERY } from "./EventDetails";
 import Event from "../styles/Event";
 import MyDatePicker from "./MyDatePicker";
 import MyTimePicker from "./MyTimePicker";
+import Error from "./ErrorMessage";
 
 const SINGLE_EVENT_QUERY = gql`
   query SINGLE_EVENT_QUERY($id: ID!) {
@@ -223,6 +224,7 @@ class UpdateEvent extends Component {
                           </div>
                           <div className="col" />
                         </div>
+                        {error ? <Error error={error} /> : null}
                         <div className="row">
                           <div className="col">
                             <DeleteEvent

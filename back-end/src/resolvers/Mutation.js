@@ -47,6 +47,10 @@ const Mutations = {
         }
       }`
     );
+    const userInvitedToEvent = oldEventDetails.user.find(
+      user => user.id === ctx.request.userId
+    ); 
+    if(!userInvitedToEvent) throw new Error("You must be invited to an event to update it");
     delete updates.id;
     const disconnectOldUsers = await ctx.db.mutation.updateEvent(
       {
@@ -104,7 +108,7 @@ const Mutations = {
     );
     //If user is part of the event, delete the event, otherwise show an error
     if (userInvitedToEvent) return ctx.db.mutation.deleteEvent({ where }, info);
-    else throw new Error("You must be logged in to do that");
+    else throw new Error("You must be invited to an event to delete it");
   },
 
   async createPlace(parent, args, ctx, info) {

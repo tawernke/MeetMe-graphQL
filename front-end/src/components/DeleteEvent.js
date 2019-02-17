@@ -35,7 +35,9 @@ class DeleteEvent extends Component {
     if (window.confirm("Are you sure you want to delete this event?")) {
       await deleteEventMutation().then(() =>
         this.props.history.push(`/${this.props.userId}`)
-      );
+      ).catch(err => {
+        alert(err.message);
+      });
     }
   };
 
