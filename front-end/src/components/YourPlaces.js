@@ -91,14 +91,14 @@ class YourPlaces extends Component {
         }}
       >
         {({data, loading}) => {
-          if (loading) return <p>Loading...</p>;
+          if (loading) return null;
           return(
             <Mutation
               mutation={UPDATE_USER_MUTATION}
               variables={{ id: this.props.match.params }}
             >
               {(updateUser, { loading, error }) => {
-                if (loading) return <p>Loading...</p>
+                if (loading) return <p></p>
                 if (error) return <p>Error: {error.message}</p>
                 return <React.Fragment>
                     <h1>Meet {data.user.name}</h1>

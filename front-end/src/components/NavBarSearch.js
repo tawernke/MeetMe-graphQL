@@ -46,7 +46,7 @@ class NavBarSearch extends Component {
         ) : null}
         <Query query={ALL_USERS_QUERY}>
           {({ data, error, loading }) => {
-            if (loading) return <p>Loading...</p>;
+            if (loading) return <p></p>;
             const userOptions = data.users.map(user => (
               <Option key={user.id} friends={user.friends} value={user.id}>
                 {user.name}

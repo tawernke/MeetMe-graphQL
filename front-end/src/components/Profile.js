@@ -95,6 +95,7 @@ class Profile extends Component {
       query: ALL_USER_EVENTS_QUERY,
       variables: { id: selectedUsers }
     });
+    console.log(data)
     const colours = ['red', 'green', 'yellow', 'purple']
     const coloredEvents = data.events.map(event => {
       event.color = 'red'
@@ -149,7 +150,7 @@ class Profile extends Component {
                 variables={{ id: [this.props.match.params.username] }}
               >
                 {({ data, error, loading }) => {
-                  if (loading) return <Spin />;
+                  if (loading) return <div className="loadingSpinner"><Spin size="large"/></div>
                   if (error) return <p>Error: {error.message}</p>;
                   return (
                     <Mutation mutation={UPDATE_EVENT_MUTATION}>

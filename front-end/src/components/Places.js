@@ -26,7 +26,7 @@ const Places = props => {
   return (
     <Query query={ALL_PLACES_QUERY}>
       {({ data, error, loading }) => {
-        if (loading) return <p>Loading...</p>;
+        if (loading) return <p></p>;
         const yelpPlaces = props.places.map(place => {
           if (!data) return null;
           let newPlace = {};

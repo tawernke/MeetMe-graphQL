@@ -58,7 +58,7 @@ class App extends Component {
           <PleaseSignIn match={this.props.match} history={this.props.history}>
             <Query query={ALL_PLACES_QUERY}>
               {({ data, error, loading }) => {
-                if (loading) return <p>Loading...</p>;
+                if (loading) return <p></p>;
                 if (error) return <p>Error: {error.message}</p>;
                 return (
                   <Switch>

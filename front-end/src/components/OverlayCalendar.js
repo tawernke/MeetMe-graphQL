@@ -18,8 +18,7 @@ class OverlayCalendar extends Component {
       <div>
         <Query query={ALL_FRIENDS_QUERY}>
           {({ error, loading, data }) => {
-            if (loading) return <p>Loading...</p>;
-            console.log(data)
+            if (loading) return <p></p>;
             return (
               <MultiSelectUsers
                 allUsers={data.friends}

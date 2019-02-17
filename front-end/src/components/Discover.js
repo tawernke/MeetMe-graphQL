@@ -33,7 +33,7 @@ class Discover extends Component {
     city: '',
     street: '',
     streetNumber: '',
-    isLoading: false,
+    // isLoading: true,
     coordinates: {
       latitude:9.277371099999996, 
       longitude: -123.12789780000001
@@ -53,7 +53,7 @@ class Discover extends Component {
     }).then(coord =>
       this.setState({
         coordinates: coord,
-        isLoading: false
+        // isLoading: false
       })
     );
   }
@@ -89,7 +89,7 @@ class Discover extends Component {
                   }}
                 >
                   {({ data, error, loading }) => {
-                    if (loading) return <Spin />;
+                    if (loading) return <div className="loadingSpinner"><Spin size="large"/></div>;
                     if (error) return <p>Error: {error.message}</p>;
                     return (
                       <div className="discover-page">

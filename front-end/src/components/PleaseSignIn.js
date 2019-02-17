@@ -6,7 +6,7 @@ import Signin from './Signin'
 const PleaseSignIn = props => (
   <Query query={CURRENT_USER_QUERY}>
     {({data, loading}) => {
-      if(loading) return <p>Loading...</p>
+      if(loading) return <p></p>
       if(!data.me) {
         return <Signin match={props.match} history={props.history}/>
       }
