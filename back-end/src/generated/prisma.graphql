@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/tim-wernke-722f56/meetme/dev
-# timestamp: Sat Feb 09 2019 13:46:34 GMT-0800 (Pacific Standard Time)
+# timestamp: Sat Feb 16 2019 14:24:58 GMT-0800 (Pacific Standard Time)
 
 type AggregateEvent {
   count: Int!
@@ -425,7 +425,7 @@ input EventSubscriptionWhereInput {
   mutation_in: [MutationType!]
 
   
-  
+
   
   updatedFields_contains: String
 
@@ -435,7 +435,7 @@ input EventSubscriptionWhereInput {
   updatedFields_contains_every: [String!]
 
   
- 
+  
   
   updatedFields_contains_some: [String!]
   node: EventWhereInput
@@ -806,6 +806,7 @@ input EventWhereUniqueInput {
 
 
 
+
 scalar Long
 
 type Mutation {
@@ -886,7 +887,7 @@ type Place implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   price: String
-  user: User!
+  user(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 
@@ -911,7 +912,7 @@ input PlaceCreateInput {
   image: String
   phone: String
   price: String
-  user: UserCreateOneWithoutPlacesInput!
+  user: UserCreateManyWithoutPlacesInput
 }
 
 input PlaceCreateManyWithoutUserInput {
@@ -1525,11 +1526,12 @@ input PlaceSubscriptionWhereInput {
   NOT: [PlaceSubscriptionWhereInput!]
 
   
+ 
   
   mutation_in: [MutationType!]
 
   
-  
+ 
   
   updatedFields_contains: String
 
@@ -1557,7 +1559,7 @@ input PlaceUpdateInput {
   image: String
   phone: String
   price: String
-  user: UserUpdateOneRequiredWithoutPlacesInput
+  user: UserUpdateManyWithoutPlacesInput
 }
 
 input PlaceUpdateManyDataInput {
@@ -2145,7 +2147,9 @@ input PlaceWhereInput {
 
   
   price_not_ends_with: String
-  user: UserWhereInput
+  user_every: UserWhereInput
+  user_some: UserWhereInput
+  user_none: UserWhereInput
 }
 
 input PlaceWhereUniqueInput {
@@ -2555,9 +2559,9 @@ input UserCreateManyWithoutEventsInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateOneWithoutPlacesInput {
-  create: UserCreateWithoutPlacesInput
-  connect: UserWhereUniqueInput
+input UserCreateManyWithoutPlacesInput {
+  create: [UserCreateWithoutPlacesInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutPreferencesInput {
@@ -2955,7 +2959,7 @@ input UserSubscriptionWhereInput {
   updatedFields_contains_every: [String!]
 
   
- 
+  
   
   updatedFields_contains_some: [String!]
   node: UserWhereInput
@@ -3033,16 +3037,21 @@ input UserUpdateManyWithoutEventsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutEventsInput!]
 }
 
+input UserUpdateManyWithoutPlacesInput {
+  create: [UserCreateWithoutPlacesInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutPlacesInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutPlacesInput!]
+}
+
 input UserUpdateManyWithWhereNestedInput {
   where: UserScalarWhereInput!
   data: UserUpdateManyDataInput!
-}
-
-input UserUpdateOneRequiredWithoutPlacesInput {
-  create: UserCreateWithoutPlacesInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutPlacesDataInput
-  upsert: UserUpsertWithoutPlacesInput
 }
 
 input UserUpdateOneWithoutPreferencesInput {
@@ -3107,9 +3116,9 @@ input UserUpdateWithWhereUniqueWithoutEventsInput {
   data: UserUpdateWithoutEventsDataInput!
 }
 
-input UserUpsertWithoutPlacesInput {
-  update: UserUpdateWithoutPlacesDataInput!
-  create: UserCreateWithoutPlacesInput!
+input UserUpdateWithWhereUniqueWithoutPlacesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutPlacesDataInput!
 }
 
 input UserUpsertWithoutPreferencesInput {
@@ -3127,6 +3136,12 @@ input UserUpsertWithWhereUniqueWithoutEventsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutEventsDataInput!
   create: UserCreateWithoutEventsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutPlacesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutPlacesDataInput!
+  create: UserCreateWithoutPlacesInput!
 }
 
 input UserWhereInput {

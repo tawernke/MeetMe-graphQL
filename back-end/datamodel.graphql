@@ -51,7 +51,7 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   price: String
-  user: User!
+  user: [User!]!
 }
 
 type Preference {

@@ -74,7 +74,7 @@ function createServer() {
             {
               where: {
                 // user: { id: ctx.request.userId },
-                user: { id: ctx.request.userId},
+                user_some: { id: ctx.request.userId},
                 type: args.type
               }
             },
