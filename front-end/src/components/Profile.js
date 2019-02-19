@@ -95,7 +95,6 @@ class Profile extends Component {
       query: ALL_USER_EVENTS_QUERY,
       variables: { id: selectedUsers }
     });
-    console.log(data)
     // const colours = ['red', 'green', 'yellow', 'purple']
     const coloredEvents = data.events.map(event => {
       event.color = 'red'

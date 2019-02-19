@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
+import { Query, Subscription } from "react-apollo";
 import gql from "graphql-tag";
+import { graphql } from 'react-apollo'
+import { ToastContainer, toast } from 'react-toastify';
 import Signin from "./components/Signin";
 import Profile from "./components/Profile";
 import Discover from "./components/Discover";
@@ -12,6 +14,7 @@ import RequestReset from "./components/RequestReset";
 import Reset from "./components/Reset";
 import AcceptFriendRequest from "./components/AcceptFriendRequest";
 import "./App.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ALL_PLACES_QUERY = gql`
   query ALL_PLACES_QUERY {
@@ -31,10 +34,29 @@ const ALL_PLACES_QUERY = gql`
   }
 `;
 
+const EVENT_SUBSCRIPTION = gql`
+  subscription {
+    newEvent {
+      node {
+        id
+        title
+      }
+    }
+  }
+`;
+
 class App extends Component {
+
+  componentDidUpdate() {
+    if(!this.props.data.loading) {
+      toast(`You've just been invited to the event: ${this.props.data.newEvent.node.title}`)
+    }
+  }
+
   render() {
     return (
       <div className="app">
+        <ToastContainer/>
         <Navbar history={this.props.history} />
         <Switch>
           <Route
@@ -58,7 +80,7 @@ class App extends Component {
           <PleaseSignIn match={this.props.match} history={this.props.history}>
             <Query query={ALL_PLACES_QUERY}>
               {({ data, error, loading }) => {
-                if (loading) return <p></p>;
+                if (loading) return null;
                 if (error) return <p>Error: {error.message}</p>;
                 return (
                   <Switch>
@@ -89,4 +111,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default graphql(EVENT_SUBSCRIPTION)(App);

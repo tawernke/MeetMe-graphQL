@@ -1,8 +1,9 @@
 const { Yelp } = require("graphql-binding-yelp");
-const { GraphQLServer } = require("graphql-yoga");
-const Mutation = require("./resolvers/Mutation");
+const { GraphQLServer, PubSub } = require("graphql-yoga");
 const { forwardTo } = require('prisma-binding')
 const { importSchema } = require("graphql-import");
+const Mutation = require("./resolvers/Mutation");
+const Subscription = require("./resolvers/Subscription")
 const Query = require("./resolvers/Query");
 const db = require("./db");
 
@@ -12,10 +13,12 @@ function createServer() {
   const apiKey = process.env.YELP_API_KEY
   const yelp = new Yelp(apiKey);
   const typeDefs = importSchema("src/schema.graphql");
+  const pubsub = new PubSub()
   
   return new GraphQLServer({
     typeDefs: "src/schema.graphql",
     resolvers: {
+      Subscription,
       Mutation,
       Query: {
 

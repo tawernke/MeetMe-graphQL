@@ -69,6 +69,10 @@ type Query {
   friends: [User]
 }
 
+type Subscription {
+  newEvent(id: ID): EventSubscriptionPayload
+}
+
 type User {
   id: ID!
   image: String
