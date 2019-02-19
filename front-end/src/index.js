@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://meet-me-yoga-prod.herokuapp.com`,
+  uri: `wss://meet-me-yoga-prod.herokuapp.com`,
   options: {
     reconnect: true,
   }
