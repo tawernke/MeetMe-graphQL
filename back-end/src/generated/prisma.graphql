@@ -1,5 +1,5 @@
-# source: https://us1.prisma.sh/tim-wernke-722f56/meetme/dev
-# timestamp: Sat Feb 16 2019 14:24:58 GMT-0800 (Pacific Standard Time)
+# source: https://meet-me-production-96f801f58d.herokuapp.com/meet-me-prod/prod
+# timestamp: Mon Feb 18 2019 20:09:19 GMT-0800 (Pacific Standard Time)
 
 type AggregateEvent {
   count: Int!
@@ -420,12 +420,12 @@ input EventSubscriptionWhereInput {
   NOT: [EventSubscriptionWhereInput!]
 
   
- 
+  
   
   mutation_in: [MutationType!]
 
   
-
+  
   
   updatedFields_contains: String
 
@@ -469,7 +469,6 @@ input EventUpdateManyMutationInput {
 input EventUpdateManyWithoutUserInput {
   create: [EventCreateWithoutUserInput!]
   connect: [EventWhereUniqueInput!]
-  set: [EventWhereUniqueInput!]
   disconnect: [EventWhereUniqueInput!]
   delete: [EventWhereUniqueInput!]
   update: [EventUpdateWithWhereUniqueWithoutUserInput!]
@@ -1526,12 +1525,12 @@ input PlaceSubscriptionWhereInput {
   NOT: [PlaceSubscriptionWhereInput!]
 
   
- 
+  
   
   mutation_in: [MutationType!]
 
   
- 
+  
   
   updatedFields_contains: String
 
@@ -1593,7 +1592,6 @@ input PlaceUpdateManyMutationInput {
 input PlaceUpdateManyWithoutUserInput {
   create: [PlaceCreateWithoutUserInput!]
   connect: [PlaceWhereUniqueInput!]
-  set: [PlaceWhereUniqueInput!]
   disconnect: [PlaceWhereUniqueInput!]
   delete: [PlaceWhereUniqueInput!]
   update: [PlaceUpdateWithWhereUniqueWithoutUserInput!]
@@ -2357,7 +2355,6 @@ input PreferenceUpdateManyMutationInput {
 input PreferenceUpdateManyWithoutUserInput {
   create: [PreferenceCreateWithoutUserInput!]
   connect: [PreferenceWhereUniqueInput!]
-  set: [PreferenceWhereUniqueInput!]
   disconnect: [PreferenceWhereUniqueInput!]
   delete: [PreferenceWhereUniqueInput!]
   update: [PreferenceUpdateWithWhereUniqueWithoutUserInput!]
@@ -2954,7 +2951,7 @@ input UserSubscriptionWhereInput {
   updatedFields_contains: String
 
   
- 
+  
   
   updatedFields_contains_every: [String!]
 
@@ -3006,7 +3003,6 @@ input UserUpdateManyDataInput {
 input UserUpdateManyInput {
   create: [UserCreateInput!]
   connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueNestedInput!]
@@ -3028,7 +3024,6 @@ input UserUpdateManyMutationInput {
 input UserUpdateManyWithoutEventsInput {
   create: [UserCreateWithoutEventsInput!]
   connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutEventsInput!]
@@ -3040,7 +3035,6 @@ input UserUpdateManyWithoutEventsInput {
 input UserUpdateManyWithoutPlacesInput {
   create: [UserCreateWithoutPlacesInput!]
   connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutPlacesInput!]
