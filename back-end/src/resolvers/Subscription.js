@@ -1,5 +1,3 @@
-const { forwardTo } = require("prisma-binding");
-
 const Subscriptions = {
   newEvent: {
     subscribe: async (parent, {id}, ctx, info) => {

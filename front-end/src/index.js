@@ -14,11 +14,11 @@ import registerServiceWorker from './registerServiceWorker'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 const httpLink = new HttpLink({
-  uri: `https://meet-me-yoga-prod.herokuapp.com`,
+  uri: `http://localhost:4444`,
 });
 
 const wsLink = new WebSocketLink({
-  uri: `wss://meet-me-yoga-prod.herokuapp.com`,
+  uri: `ws://localhost:4444`,
   options: {
     reconnect: true,
   }

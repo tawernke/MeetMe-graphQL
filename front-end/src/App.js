@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Query, Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { graphql } from 'react-apollo'
-import { ToastContainer, toast } from 'react-toastify';
 import Signin from "./components/Signin";
 import Profile from "./components/Profile";
 import Discover from "./components/Discover";
@@ -34,29 +33,10 @@ const ALL_PLACES_QUERY = gql`
   }
 `;
 
-const EVENT_SUBSCRIPTION = gql`
-  subscription {
-    newEvent {
-      node {
-        id
-        title
-      }
-    }
-  }
-`;
-
 class App extends Component {
-
-  componentDidUpdate() {
-    if(!this.props.data.loading) {
-      toast(`You've just been invited to the event: ${this.props.data.newEvent.node.title}`)
-    }
-  }
-
   render() {
     return (
       <div className="app">
-        <ToastContainer/>
         <Navbar history={this.props.history} />
         <Switch>
           <Route
@@ -111,4 +91,4 @@ class App extends Component {
   }
 }
 
-export default graphql(EVENT_SUBSCRIPTION)(App);
+export default App;
