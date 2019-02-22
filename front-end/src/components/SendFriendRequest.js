@@ -8,10 +8,12 @@ const ADD_FRIEND_MUTATION = gql`
   mutation ADD_FRIEND_MUTATION(
     $email: String!
     $friendRequester: String!
+    $id: ID
   ) {
     sendFriendRequest(
       email: $email
       friendRequester: $friendRequester
+      id: $id
     ) {
       message
     }
@@ -23,6 +25,7 @@ class SendFriendRequest extends Component {
     sendFriendRequest({
       variables: {
         email: newFriendDetails.email,
+        id: this.props.friendRequestId,
         friendRequester: this.props.me.name
       }
     });

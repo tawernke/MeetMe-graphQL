@@ -48,7 +48,7 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  sendFriendRequest(email: String!, friendRequester: String!): SuccessMessage
+  sendFriendRequest(email: String!, friendRequester: String! id: ID): SuccessMessage
   acceptFriendRequest(id: ID!): User
   createPreference(name: String): Preference
 }
@@ -71,6 +71,7 @@ type Query {
 
 type Subscription {
   newEvent(id: ID): EventSubscriptionPayload
+  newFriendRequest(id: ID): User
 }
 
 type User {

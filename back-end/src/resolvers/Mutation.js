@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { transport, makeANiceEmail } = require("../mail");
+const subUtils = require('../pubsub')
 
 const Mutations = {
   //Event Muatations
@@ -302,6 +303,7 @@ const Mutations = {
         ctx.request.userId
       }">Click Here to accept the request</a>`)
     });
+    subUtils.pubsub.publish(subUtils.NEW_FRIEND_REQUEST, { newFriendRequest: {name: friendRequester, id: id} })
     return { message: "Thanks" };
   },
 
