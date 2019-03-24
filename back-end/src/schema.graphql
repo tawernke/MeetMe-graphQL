@@ -70,7 +70,7 @@ type Query {
 }
 
 type Subscription {
-  newEvent(id: ID): EventSubscriptionPayload
+  newEvent(id: ID): Event
   newFriendRequest(id: ID): User
 }
 

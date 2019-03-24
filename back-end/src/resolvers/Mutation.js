@@ -27,7 +27,14 @@ const Mutations = {
       },
       info
     );
-
+    const usersMinusHost = event.user.filter(
+      user => user.id != ctx.request.userId
+    );
+    const eventMinusHost = {...event}
+    eventMinusHost.user = usersMinusHost;
+    subUtils.pubsub.publish(subUtils.NEW_EVENT, {
+      newEvent: { eventMinusHost: eventMinusHost, id: ctx.request.userId }
+    });
     return event;
   },
 

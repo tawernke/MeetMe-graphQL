@@ -136,7 +136,8 @@ class EventDetails extends Component {
           <div className="eventDetails">
             <Event onSubmit={async e => {
               e.preventDefault()
-                await createEvent().then(() => this.props.history.push(`/${this.props.userId}`))
+                const res = await createEvent()
+                this.props.history.push(`/${this.props.userId}`)
             }}>
               <h2>Create Event</h2>
               <fieldset disabled={loading} aria-busy={loading}>

@@ -111,7 +111,14 @@ class Profile extends Component {
         <div className="profile-yourPlaces">
           <ApolloConsumer>
             {client => {
-              return <YourPlaces match={this.props.match} addOverlayCalendar={selectedUsers => this.addOverlayCalendar(selectedUsers, client)} />;
+              return (
+                <YourPlaces
+                  match={this.props.match}
+                  addOverlayCalendar={selectedUsers =>
+                    this.addOverlayCalendar(selectedUsers, client)
+                  }
+                />
+              );
             }}
           </ApolloConsumer>
         </div>
@@ -147,9 +154,15 @@ class Profile extends Component {
               <Query
                 query={ALL_USER_EVENTS_QUERY}
                 variables={{ id: [this.props.match.params.username] }}
+                fetchPolicy={'network-only'}
               >
                 {({ data, error, loading }) => {
-                  if (loading) return <div className="loadingSpinner"><Spin size="large"/></div>
+                  if (loading)
+                    return (
+                      <div className="loadingSpinner">
+                        <Spin size="large" />
+                      </div>
+                    );
                   if (error) return <p>Error: {error.message}</p>;
                   return (
                     <Mutation mutation={UPDATE_EVENT_MUTATION}>
@@ -169,7 +182,9 @@ class Profile extends Component {
                             editable={true}
                             eventDrop={e => this.eventDrop(e, updateEvent)}
                             eventLimit={true}
-                            events={data.events.concat(this.state.overlayEvents)}
+                            events={data.events.concat(
+                              this.state.overlayEvents
+                            )}
                             eventClick={this.eventClick}
                             dayClick={this.dayClick}
                             se
