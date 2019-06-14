@@ -37,8 +37,9 @@ class Navbar extends React.Component {
   render() {
     return (
       <Query query={CURRENT_USER_QUERY}>
-        {({ data: { me }, error, loading }) => {
-          if (loading) return null;
+        {({ data, error, loading }) => {
+          if (loading || !data) return null;
+          const { me } = data
           return (
             <Header style={{ position: "realtive", zIndex: 1, width: "100%" }}>
               {me && (
