@@ -43,23 +43,24 @@ class Profile extends Component {
   };
 
   eventDrop = async (eventDetails, updateEvent) => {
+    const { id, start, end, title, description, location, user } = eventDetails
     await updateEvent({
       variables: {
-        id: eventDetails.id,
-        start: eventDetails.start,
-        end: eventDetails.end
+        id,
+        start,
+        end,
       },
       optimisticResponse: {
         __typename: "Mutation",
         updateEvent: {
           __typename: "Event",
-          id: eventDetails.id,
-          start: eventDetails.start,
-          end: eventDetails.end,
-          title: eventDetails.title,
-          description: eventDetails.description,
-          location: eventDetails.location,
-          user: eventDetails.user
+          id,
+          start,
+          end,
+          title,
+          description,
+          location,
+          user,
         }
       }
     });
@@ -111,7 +112,14 @@ class Profile extends Component {
         <div className="profile-yourPlaces">
           <ApolloConsumer>
             {client => {
-              return <YourPlaces match={this.props.match} addOverlayCalendar={selectedUsers => this.addOverlayCalendar(selectedUsers, client)} />;
+              return (
+                <YourPlaces
+                  match={this.props.match}
+                  addOverlayCalendar={selectedUsers =>
+                    this.addOverlayCalendar(selectedUsers, client)
+                  }
+                />
+              );
             }}
           </ApolloConsumer>
         </div>
@@ -147,9 +155,15 @@ class Profile extends Component {
               <Query
                 query={ALL_USER_EVENTS_QUERY}
                 variables={{ id: [this.props.match.params.username] }}
+                fetchPolicy={'network-only'}
               >
                 {({ data, error, loading }) => {
-                  if (loading) return <div className="loadingSpinner"><Spin size="large"/></div>
+                  if (loading)
+                    return (
+                      <div className="loadingSpinner">
+                        <Spin size="large" />
+                      </div>
+                    );
                   if (error) return <p>Error: {error.message}</p>;
                   return (
                     <Mutation mutation={UPDATE_EVENT_MUTATION}>
@@ -169,7 +183,9 @@ class Profile extends Component {
                             editable={true}
                             eventDrop={e => this.eventDrop(e, updateEvent)}
                             eventLimit={true}
-                            events={data.events.concat(this.state.overlayEvents)}
+                            events={data.events.concat(
+                              this.state.overlayEvents
+                            )}
                             eventClick={this.eventClick}
                             dayClick={this.dayClick}
                             se

@@ -1,7 +1,6 @@
 import React from "react";
-import { Query, Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { Menu, Layout } from "antd";
-import { graphql } from "react-apollo";
 import { CURRENT_USER_QUERY } from "./User";
 import { Link } from "react-router-dom";
 import gql from "graphql-tag";
@@ -16,10 +15,8 @@ const { Header } = Layout;
 const EVENT_SUBSCRIPTION = gql`
   subscription($id: ID) {
     newEvent(id: $id) {
-      node {
-        id
-        title
-      }
+      id
+      title
     }
   }
 `;
@@ -34,51 +31,49 @@ const FRIEND_REQUEST_SUBSCRIPTION = gql`
 `;
 
 class Navbar extends React.Component {
+  subscribeToNewFriend = (subscribeToMore, id) => {
+    subscribeToMore({
+      document: FRIEND_REQUEST_SUBSCRIPTION,
+      variables: { id },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        toast(
+          `${subscriptionData.data.newFriendRequest.name} has just added you as a friend!`
+        );
+      }
+    });
+  };
+
+  subscribeToNewEvent = (subscribeToMore, id) => {
+    subscribeToMore({
+      document: EVENT_SUBSCRIPTION,
+      variables: { id },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        toast(
+          `You've just been invited to the event: ${
+            subscriptionData.data.newEvent.title
+          }`
+        );
+        return prev
+      }
+    });
+  };
+
   render() {
     return (
-      <Query query={CURRENT_USER_QUERY}>
-        {({ data, error, loading }) => {
-          if (loading || !data) return null;
-          const { me } = data
-          return (
-            <Header style={{ position: "realtive", zIndex: 1, width: "100%" }}>
-              {me && (
-                <React.Fragment>
-                    <>
-                      <Subscription
-                        subscription={EVENT_SUBSCRIPTION}
-                        variables={{ id: me.id }}
-                      >
-                        {({ data, error, loading }) => {
-                          if (loading) return <p />;
-                          console.log(data);
-                          if (!data.loading) {
-                            toast(
-                              `You've just been invited to the event: ${
-                                data.newEvent.node.title
-                              }`
-                            );
-                          }
-                          return <ToastContainer />;
-                        }}
-                      </Subscription>
-                      <Subscription
-                        subscription={FRIEND_REQUEST_SUBSCRIPTION}
-                        variables={{ id: me.id }}
-                      >
-                        {({ data, loading }) => {
-                          if (loading) return null
-                          console.log(data);
-                            toast(
-                              `${
-                                data.newFriendRequest.name
-                              } has just added you as a friend!`
-                            );
-                        return <ToastContainer/>
-                        }}
-                      </Subscription>
-                    </>
-
+      <>
+        <ToastContainer />
+        <Query query={CURRENT_USER_QUERY}>
+          {({ data: { me }, error, loading, subscribeToMore }) => {
+            if (loading) return null;
+              this.subscribeToNewFriend(subscribeToMore, me.id);
+              this.subscribeToNewEvent(subscribeToMore, me.id);
+            return (
+              <Header
+                style={{ position: "realtive", zIndex: 1, width: "100%" }}
+              >
+                {me && (
                   <Menu
                     theme="dark"
                     mode="horizontal"
@@ -97,12 +92,12 @@ class Navbar extends React.Component {
                       <NavBarSearch me={me} history={this.props.history} />
                     </Menu.Item>
                   </Menu>
-                </React.Fragment>
-              )}
-            </Header>
-          );
-        }}
-      </Query>
+                )}
+              </Header>
+            );
+          }}
+        </Query>
+      </>
     );
   }
 }

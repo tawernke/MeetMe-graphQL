@@ -81,7 +81,9 @@ const client = new ApolloClient({
     }),
     link
   ]),
-  cache
+  cache: new InMemoryCache({
+    dataIdFromObject: object => object.id,
+  }),
 });
 
 
